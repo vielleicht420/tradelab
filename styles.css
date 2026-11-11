@@ -35,7 +35,7 @@ b,strong{font-weight:600;color:var(--t1)}
 /* ---------- Navigationsleiste ---------- */
 .topbar{position:fixed;z-index:40;top:0;left:0;right:0;height:calc(var(--sat) + var(--nav));padding:var(--sat) 8px 0;display:flex;align-items:center;justify-content:space-between;
   transition:background .25s,border-color .25s,transform .45s var(--ease),opacity .3s;border-bottom:.5px solid transparent}
-.topbar{background:var(--bg)}
+.topbar{background:#0f0e0c;background-color:var(--bg)}
 .topbar.scrolled{background:var(--bg);border-bottom-color:rgba(255,236,208,.12)}
 .tb-title{position:absolute;left:84px;right:84px;top:var(--sat);height:var(--nav);display:flex;align-items:center;justify-content:center;font:400 21px/1 var(--serif);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s;pointer-events:none}
@@ -51,7 +51,7 @@ b,strong{font-weight:600;color:var(--t1)}
 /* ---------- Seiten ---------- */
 #viewport{position:fixed;inset:0;overflow:hidden;background:var(--bg);transition:background .4s}
 .view{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:var(--bg);
-  padding:0 var(--pad) calc(var(--tabh) + var(--tbb) + 40px);will-change:transform}
+  padding:0 var(--pad) calc(var(--tabh) + var(--tbb) + 40px)}
 .view::before{content:"";display:block;height:calc(var(--sat) + var(--nav) + var(--top-air))}
 body.train .view::before{display:none}
 .view::-webkit-scrollbar{display:none}
@@ -495,7 +495,7 @@ button.rw:active{opacity:.55}
 .toast{position:fixed;left:50%;bottom:calc(var(--tabh) + var(--tbb) + 14px);transform:translate(-50%,16px);opacity:0;z-index:99;padding:12px 18px;border-radius:22px;background:var(--t1);color:var(--bg);font-size:14px;font-weight:600;
   transition:opacity .25s,transform .35s var(--spring);pointer-events:none;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis;box-shadow:0 10px 30px rgba(0,0,0,.4)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-body.train .toast{bottom:calc(var(--sab) + 120px);background:#eef1f7;color:#10131a;font-family:"Nunito";font-weight:800}
+body.train .toast{bottom:calc(var(--tbb) + 92px);background:#eef1f7;color:#10131a;font-family:"Nunito";font-weight:800}
 .bump{animation:bump .42s var(--spring)}
 @keyframes bump{0%{transform:scale(1)}35%{transform:scale(1.035)}100%{transform:scale(1)}}
 .pat-svg.go .cd{transform-box:fill-box;transform-origin:50% 100%;animation:cdGrow .55s var(--spring) both;animation-delay:calc(var(--b,0ms) + var(--i,0)*45ms)}
@@ -539,7 +539,7 @@ body.train{--tbg:#10131a;--ts1:#181c26;--ts2:#222838;--tbd:#2b3245;--tdp:#07090d
 body.train #viewport,body.train .view{background:var(--tbg)}
 body.train .topbar{transform:translateY(-110%);opacity:0;pointer-events:none}
 body.train .tabbar{transform:translateY(160%);opacity:0;pointer-events:none}
-body.train .view{padding:0 0 calc(var(--sab) + 130px);font-family:"Nunito",var(--ui);color:var(--ink)}
+body.train .view{padding:0 0 calc(var(--tbb) + 120px);font-family:"Nunito",var(--ui);color:var(--ink)}
 body.train .view b{color:inherit;font-weight:900}
 .trt{position:sticky;top:0;z-index:20;height:calc(var(--sat) + 60px);padding:var(--sat) 14px 0;display:flex;align-items:center;gap:12px;background:var(--tbg);color:var(--ink);border-bottom:2px solid var(--tbd)}
 .trx{width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:var(--ts1);border:2px solid var(--tbd);box-shadow:0 3px 0 var(--tdp);color:var(--c2);flex:none;transition:transform .08s,box-shadow .08s}
@@ -623,7 +623,7 @@ body.train .view b{color:inherit;font-weight:900}
 .ms.am{border-color:rgba(255,176,32,.4);background:var(--ga-t)}.ms.am b{color:var(--ga)}
 .ms.gr{border-color:rgba(47,207,122,.4);background:var(--gg-t)}.ms.gr b{color:var(--gg-l)}
 .ms.bl{border-color:rgba(77,124,255,.45);background:var(--tb-t)}.ms.bl b{color:var(--tb-l)}
-.fbar{position:fixed;z-index:30;left:0;right:0;bottom:0;padding:14px 18px calc(var(--sab) + 14px);background:var(--tbg);border-top:2px solid var(--tbd);transition:background .25s,border-color .25s;font-family:"Nunito"}
+.fbar{position:fixed;z-index:30;left:0;right:0;bottom:0;padding:10px 16px var(--tbb);background:var(--tbg);border-top:2px solid var(--tbd);transition:background .25s,border-color .25s;font-family:"Nunito"}
 .fbar.two{display:grid;grid-template-columns:1fr 1.4fr;gap:10px}
 .fbar.ok{background:#0f2519;border-top-color:rgba(47,207,122,.45);animation:fbUp .32s var(--spring)}
 .fbar.no{background:#2a1416;border-top-color:rgba(255,92,77,.45);animation:fbUp .32s var(--spring)}
@@ -767,5 +767,10 @@ img,svg{-webkit-touch-callout:none}
    html bekommt im Standalone-Modus 100lvh (im normalen Fluss, nicht fixed) – dann korrigiert WebKit den Viewport selbst.
    Klappt das nicht (html.sa-short, per JS erkannt), bleibt das normale Layout und die Pille sitzt 10 px über der Viewport-Kante. */
 html.sa{position:static!important;inset:auto!important;width:100%;height:100vh!important;height:100lvh!important;overflow:hidden}
-html.sa body{position:relative!important;inset:auto!important;height:100%!important;overflow:hidden}
+/* body bleibt am Viewport angeheftet (fixed): sonst fließt das Dokument unter die Statusleiste und iOS 26 legt dort seinen „Scroll Edge“-Blur über den Kopf */
+html.sa body{position:fixed!important;inset:0!important;width:100%;height:auto!important;overflow:hidden}
 html.sa-short{--tbb:10px}
+
+/* v6h: Fixe Leisten im Training dürfen nicht mit dem Inhalt scrollen – .view darf kein Containing Block für position:fixed sein (kein will-change/transform in Ruhe) */
+.view.current:not([class*="enter-"]){will-change:auto;transform:none}
+.fbar.ok,.fbar.no{padding-top:14px}

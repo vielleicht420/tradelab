@@ -87,7 +87,7 @@ Die Tab-Leiste ist eine schwebende Pille:
 * links/rechts 12 px, Höhe 64 px, Radius 32
 * `bottom: var(--tbb)` mit `--tbb: max(10px, calc(var(--sab) - 12px))` – iPhone: 22 px vom physischen Rand, ohne Safe-Area 10 px.
 * Kein dunkler Verlauf/Kasten mehr unter der Pille – der Inhalt scrollt sichtbar dahinter.
-* iOS-26-Standalone: `innerHeight`/`100%`/`100dvh` sind um den oberen Safe-Bereich zu kurz, nur `100lvh` ist die Bildschirmhöhe. Im Standalone-Modus bekommt `html` deshalb `height: 100lvh` (Klasse `html.sa`, nicht fixed). Erkennt das JS nach 1,5 s, dass der Viewport trotzdem kurz bleibt, fällt es auf das normale Layout zurück (`html.sa-short`, Pille 10 px über der Viewport-Kante). Keine JS-Höhenkorrektur von Elementen mehr.
+* iOS-26-Standalone: `innerHeight`/`100%`/`100dvh` sind um den oberen Safe-Bereich zu kurz, nur `100lvh` ist die Bildschirmhöhe. Im Standalone-Modus bekommt `html` deshalb `height: 100lvh` (Klasse `html.sa`, nicht fixed). `body` bleibt dabei `position: fixed; inset: 0` – fließt das Dokument unter die Statusleiste, legt iOS 26 dort seinen Liquid-Glass-„Scroll Edge“-Blur über den Kopf (v16-Fehler). Erkennt das JS nach 1,5 s, dass der Viewport trotzdem kurz bleibt, fällt es auf das normale Layout zurück (`html.sa-short`, Pille 10 px über der Viewport-Kante). Keine JS-Höhenkorrektur von Elementen mehr.
 * Diagnosezeile in Einstellungen („TradeLab 6.1“): Anzeige, Bildschirm, Modus (lvh/kurz/normal), html-Höhe, Safe-Area, Abstand der Tab-Leiste.
 * Der aktive Tab wächst (flex 2,1), wird akzentfarben und zeigt sein Label.
 
@@ -155,7 +155,7 @@ Instrument Serif hat keine Tabellenziffern. Damit Hochzählen nicht springt, fix
 * Keine Regenbogen-Verläufe, kein Emoji-Spam, kein schweres Glas.
 * App-Texte auf Deutsch, Du-Form.
 * Kein API-Schlüssel im Code. Der Schlüssel liegt nur im `localStorage` des Geräts.
-* Service-Worker-Cache: `tradelab-v16`.
+* Service-Worker-Cache: `tradelab-v17`.
 
 ## 5. Sticky-Elemente und Tab-Zuordnung (v6b)
 
@@ -189,3 +189,9 @@ GitHub Pages: https://vielleicht420.github.io/tradelab/ – siehe `DEPLOY.md`.
 * Endpoint: `POST https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent`, Header `x-goog-api-key`. Bild als `inline_data` (JPEG, max. 1600 px, base64), Prompt als `system_instruction`, `responseMimeType: application/json`.
 * Modelle: Standard `gemini-3.8-flash`; bei 429/404/5xx automatischer Wechsel auf `gemini-3.5-flash-lite` (höheres Gratis-Tageslimit). `gemini-2.5-flash` ist abgekündigt (Abschaltung 1.12.2026) und für neue Projekte nicht mehr verfügbar.
 * Schlüssel nur in `localStorage` (`tl_ai`). Fehlertexte auf Deutsch: ungültiger Schlüssel, Limit erreicht (Reset 9 Uhr deutscher Zeit), keine Berechtigung, Modell nicht gefunden, Region, Überlastung, Blockiert.
+
+## 10. Fixe Leisten (v6h)
+
+* `.view` hat in Ruhe **kein** `will-change`/`transform`. Sonst wird die Ansicht zum Containing Block für `position: fixed`, und die Prüfen-/„LOS GEHT'S“-Leiste (`.fbar`) scrollt mit dem Inhalt mit (v16-Fehler: Leiste mitten im Bild).
+* `.fbar`: unten bündig, kompakt (`padding: 10px 16px var(--tbb)`) – der Button sitzt auf derselben Höhe wie die Tab-Leiste, inkl. „kurz“-Fallback. Feedback-Varianten (`.ok`/`.no`) oben 14 px.
+* Training-Inhalt endet über der Leiste (`padding-bottom: calc(var(--tbb) + 120px)`), Toasts im Training bei `var(--tbb) + 92px`.
