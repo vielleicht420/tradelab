@@ -155,7 +155,7 @@ Instrument Serif hat keine Tabellenziffern. Damit Hochzählen nicht springt, fix
 * Keine Regenbogen-Verläufe, kein Emoji-Spam, kein schweres Glas.
 * App-Texte auf Deutsch, Du-Form.
 * Kein API-Schlüssel im Code. Der Schlüssel liegt nur im `localStorage` des Geräts.
-* Service-Worker-Cache: `tradelab-v17`.
+* Service-Worker-Cache: `tradelab-v18`.
 
 ## 5. Sticky-Elemente und Tab-Zuordnung (v6b)
 
@@ -195,3 +195,9 @@ GitHub Pages: https://vielleicht420.github.io/tradelab/ – siehe `DEPLOY.md`.
 * `.view` hat in Ruhe **kein** `will-change`/`transform`. Sonst wird die Ansicht zum Containing Block für `position: fixed`, und die Prüfen-/„LOS GEHT'S“-Leiste (`.fbar`) scrollt mit dem Inhalt mit (v16-Fehler: Leiste mitten im Bild).
 * `.fbar`: unten bündig, kompakt (`padding: 10px 16px var(--tbb)`) – der Button sitzt auf derselben Höhe wie die Tab-Leiste, inkl. „kurz“-Fallback. Feedback-Varianten (`.ok`/`.no`) oben 14 px.
 * Training-Inhalt endet über der Leiste (`padding-bottom: calc(var(--tbb) + 120px)`), Toasts im Training bei `var(--tbb) + 92px`.
+
+## 11. Statusleiste (v6i)
+
+* `apple-mobile-web-app-status-bar-style` = **`black`** (nicht `black-translucent`). Die Web-Ansicht beginnt unter einer opaken schwarzen Statusleiste; iOS 26 legt dort keinen Liquid-Glass-„Scroll Edge“-Blur mehr über Kopf/Titel/Zahnrad. iOS übernimmt das nur bei einer **neuen** Home-Bildschirm-Installation.
+* `--sat` ist damit 0. Die 100lvh-Korrektur (`html.sa`) greift nur noch, wenn die App noch mit `black-translucent` installiert ist (`--sat` > 0); sonst normales Layout. „kurz“-Fallback bleibt.
+* Kopf in Ruhe ohne Transform/Filter/Schatten; Titel blendet nur per Opacity ein; Zurück/Zahnrad massiv `#24221e` mit Rand `#34312b`; Haarlinie `#2a2722` beim Scrollen.

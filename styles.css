@@ -34,14 +34,14 @@ b,strong{font-weight:600;color:var(--t1)}
 
 /* ---------- Navigationsleiste ---------- */
 .topbar{position:fixed;z-index:40;top:0;left:0;right:0;height:calc(var(--sat) + var(--nav));padding:var(--sat) 8px 0;display:flex;align-items:center;justify-content:space-between;
-  transition:background .25s,border-color .25s,transform .45s var(--ease),opacity .3s;border-bottom:.5px solid transparent}
+  transition:background .25s,border-color .25s,transform .45s var(--ease),opacity .3s;border-bottom:1px solid transparent}
 .topbar{background:#0f0e0c;background-color:var(--bg)}
-.topbar.scrolled{background:var(--bg);border-bottom-color:rgba(255,236,208,.12)}
+.topbar.scrolled{background:var(--bg);border-bottom-color:#2a2722}
 .tb-title{position:absolute;left:84px;right:84px;top:var(--sat);height:var(--nav);display:flex;align-items:center;justify-content:center;font:400 21px/1 var(--serif);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s;pointer-events:none}
-.topbar.scrolled .tb-title{opacity:1;transform:none}
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .2s;pointer-events:none;color:var(--t1)}
+.topbar.scrolled .tb-title{opacity:1}
 .nav-btn{height:38px;min-width:38px;display:flex;align-items:center;justify-content:center;gap:2px;padding:0 12px 0 8px;color:var(--t1);font-size:15px;font-weight:500;border-radius:19px;
-  background:var(--s2);border:1px solid var(--hair);transition:transform .15s var(--ease),opacity .15s}
+  background:#24221e;border:1px solid #34312b;transition:transform .15s var(--ease);box-shadow:none}
 .nav-btn:active{transform:scale(.92)}
 .nav-btn svg{width:20px;height:20px}
 #btn-set{padding:0;width:38px}
@@ -774,3 +774,8 @@ html.sa-short{--tbb:10px}
 /* v6h: Fixe Leisten im Training dürfen nicht mit dem Inhalt scrollen – .view darf kein Containing Block für position:fixed sein (kein will-change/transform in Ruhe) */
 .view.current:not([class*="enter-"]){will-change:auto;transform:none}
 .fbar.ok,.fbar.no{padding-top:14px}
+
+/* v6i: Kopf gestochen scharf – keine Transforms/Filter in Ruhe */
+.topbar:not(.hide){transform:none}
+body:not(.train) .topbar{transform:none;opacity:1;filter:none}
+.topbar .nav-btn,.topbar .tb-title{filter:none;text-shadow:none}

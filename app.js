@@ -512,7 +512,7 @@ V.einstellungen=()=>{const c=getCfg(),ac=LS.get("accent","amber");return{title:"
  <div class="rows r"><button class="rw" id="s_rp"><span class="ic">${I.reset}</span><b>Lernfortschritt &amp; Quiz zurücksetzen</b></button><button class="rw" id="s_rk"><span class="ic">${I.cards}</span><b>Karteikarten-Fortschritt zurücksetzen</b></button><button class="rw" id="s_ra"><span class="ic">${I.trash}</span><b>Gespeicherte Analyse löschen</b></button></div>
  ${SH("App")}
  <div class="rows r"><div class="rw"><span class="ic">${I.phone}</span><div><b>Installieren</b><span>Safari → Teilen → Zum Home-Bildschirm. Danach auch offline nutzbar (außer KI-Analyse).</span></div></div><div class="rw"><span class="ic">${I.info}</span><div><b>TradeLab 6.1</b><span>Inhalte Stand November 2026 · Keine Anlageberatung</span><span id="s_vh" style="opacity:.6;font-size:12px"></span></div></div></div>`,
- after(v){{const e=$("#s_vh",v),x=window.__vh&&window.__vh();if(e&&x)e.textContent=` · Anzeige ${x.iw}×${x.ih} · Bildschirm ${x.sw}×${x.sh} · ${x.sa?"Home-Bildschirm-App":"Browser"} · Modus ${x.mode} · html ${x.hh} · Safe-Area unten ${x.sab.trim()||"0px"} · Abstand Tab-Leiste ${x.gap}px`}$$("[data-acc]",v).forEach(b=>b.onclick=()=>{LS.set("accent",b.dataset.acc);applyAccent(b.dataset.acc);$$("[data-acc]",v).forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-checked",x===b)});
+ after(v){{const e=$("#s_vh",v),x=window.__vh&&window.__vh();if(e&&x)e.textContent=` · Anzeige ${x.iw}×${x.ih} · Bildschirm ${x.sw}×${x.sh} · ${x.sa?"Home-Bildschirm-App":"Browser"} · Modus ${x.mode} · Safe-Area oben ${(x.sat||"").trim()||"0px"} · html ${x.hh} · Safe-Area unten ${x.sab.trim()||"0px"} · Abstand Tab-Leiste ${x.gap}px`}$$("[data-acc]",v).forEach(b=>b.onclick=()=>{LS.set("accent",b.dataset.acc);applyAccent(b.dataset.acc);$$("[data-acc]",v).forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-checked",x===b)});
    b.classList.remove("pop");void b.offsetWidth;b.classList.add("pop");const pr=$(".prev",v);pr.classList.remove("flash");void pr.offsetWidth;pr.classList.add("flash");try{navigator.vibrate&&navigator.vibrate(6)}catch(e){}});
   const read=()=>({provider:"gemini",key:$("#s_k",v).value.trim(),model:$("#s_m",v).value.trim()});
   $("#s_save",v).onclick=()=>{LS.set("ai",read());toast("Gespeichert")};
@@ -835,12 +835,12 @@ function fcSummary(w){fcS.done=true;const S=fcS,done=S.missed.length+S.ok,N=done
 /* iOS-Standalone: 100lvh-Hülle (CSS html.sa). Prüfen, ob WebKit den Viewport danach wirklich vergrößert; sonst normales Layout (html.sa-short). */
 const isSA=()=>navigator.standalone===true||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches);
 let saChecks=0;
-function saCheck(){const R=document.documentElement;if(!isSA()){R.classList.remove("sa","sa-short");return}
+function saCheck(){const R=document.documentElement;const sat=parseFloat(getComputedStyle(R).getPropertyValue("--sat"))||0;if(!isSA()||sat<1){R.classList.remove("sa","sa-short");return}
  if(!R.classList.contains("sa-short"))R.classList.add("sa");
  const hh=R.getBoundingClientRect().height,ih=window.visualViewport?visualViewport.height:innerHeight;
  if(R.classList.contains("sa")&&hh-ih>2&&saChecks>=2){R.classList.remove("sa");R.classList.add("sa-short")}}
 saCheck();[400,1500].forEach(t=>setTimeout(()=>{saChecks++;saCheck()},t));addEventListener("resize",saCheck);
-window.__vh=()=>{const R=document.documentElement,cs=getComputedStyle(R),tb=document.querySelector(".tabbar");return{ih:innerHeight,iw:innerWidth,sh:screen.height,sw:screen.width,sa:isSA(),mode:R.classList.contains("sa")?"lvh":R.classList.contains("sa-short")?"kurz":"normal",hh:Math.round(R.getBoundingClientRect().height),sab:cs.getPropertyValue("--sab"),gap:tb?Math.round(innerHeight-tb.getBoundingClientRect().bottom):0}};
+window.__vh=()=>{const R=document.documentElement,cs=getComputedStyle(R),tb=document.querySelector(".tabbar");return{ih:innerHeight,iw:innerWidth,sh:screen.height,sw:screen.width,sa:isSA(),mode:R.classList.contains("sa")?"lvh":R.classList.contains("sa-short")?"kurz":"normal",sat:cs.getPropertyValue("--sat"),hh:Math.round(R.getBoundingClientRect().height),sab:cs.getPropertyValue("--sab"),gap:tb?Math.round(innerHeight-tb.getBoundingClientRect().bottom):0}};
 /* ---------- Router ---------- */
 /* iOS: nur echte Scrollflächen dürfen sich bewegen – Kopf, Tab-Leiste, Prüfen-Leiste nie */
 document.addEventListener("touchmove",e=>{if(e.touches.length!==1)return;const t=e.target;if(t&&t.closest&&t.closest(".view,.hscroll,.filters,.tablewrap,input,textarea,select"))return;if(e.cancelable)e.preventDefault()},{passive:false});
