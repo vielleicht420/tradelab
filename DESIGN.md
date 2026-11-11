@@ -85,8 +85,10 @@ So sind die einzelnen Screens aufgebaut:
 Die Tab-Leiste ist eine schwebende Pille:
 
 * links/rechts 12 px, Höhe 64 px, Radius 32
-* `bottom: calc(var(--tbb) - var(--bfix))` mit `--tbb: max(8px, calc(var(--sab) - 14px))` – iPhone: 20 px vom physischen Rand, ohne Safe-Area 8 px
-* `--bfix` (JS `fixVH()`): nur in der Home-Bildschirm-App. Ist der Layout-Viewport kürzer als der Bildschirm (iOS-Eigenheit), werden Hülle, Tab-Leiste, Prüfen-Leiste, Toast und Verlauf um die Differenz (max. 120 px) nach unten gezogen. Diagnose-Werte stehen in Einstellungen unter „TradeLab 6.1“.
+* `bottom: var(--tbb)` mit `--tbb: max(10px, calc(var(--sab) - 12px))` – iPhone: 22 px vom physischen Rand, ohne Safe-Area 10 px.
+* Kein dunkler Verlauf/Kasten mehr unter der Pille – der Inhalt scrollt sichtbar dahinter.
+* iOS-26-Standalone: `innerHeight`/`100%`/`100dvh` sind um den oberen Safe-Bereich zu kurz, nur `100lvh` ist die Bildschirmhöhe. Im Standalone-Modus bekommt `html` deshalb `height: 100lvh` (Klasse `html.sa`, nicht fixed). Erkennt das JS nach 1,5 s, dass der Viewport trotzdem kurz bleibt, fällt es auf das normale Layout zurück (`html.sa-short`, Pille 10 px über der Viewport-Kante). Keine JS-Höhenkorrektur von Elementen mehr.
+* Diagnosezeile in Einstellungen („TradeLab 6.1“): Anzeige, Bildschirm, Modus (lvh/kurz/normal), html-Höhe, Safe-Area, Abstand der Tab-Leiste.
 * Der aktive Tab wächst (flex 2,1), wird akzentfarben und zeigt sein Label.
 
 Ein Verlauf (`#app::after`) lässt den Inhalt weich unter der Pille auslaufen. Seit dem Umzug auf GitHub Pages (v6d) gibt es keinen deed.page-Hinweis und keine Reservierung dafür mehr.
@@ -153,7 +155,7 @@ Instrument Serif hat keine Tabellenziffern. Damit Hochzählen nicht springt, fix
 * Keine Regenbogen-Verläufe, kein Emoji-Spam, kein schweres Glas.
 * App-Texte auf Deutsch, Du-Form.
 * Kein API-Schlüssel im Code. Der Schlüssel liegt nur im `localStorage` des Geräts.
-* Service-Worker-Cache: `tradelab-v15`.
+* Service-Worker-Cache: `tradelab-v16`.
 
 ## 5. Sticky-Elemente und Tab-Zuordnung (v6b)
 
