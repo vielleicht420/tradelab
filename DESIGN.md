@@ -152,7 +152,7 @@ Instrument Serif hat keine Tabellenziffern. Damit Hochzählen nicht springt, fix
 * Keine Regenbogen-Verläufe, kein Emoji-Spam, kein schweres Glas.
 * App-Texte auf Deutsch, Du-Form.
 * Kein API-Schlüssel im Code. Der Schlüssel liegt nur im `localStorage` des Geräts.
-* Service-Worker-Cache: `tradelab-v12`.
+* Service-Worker-Cache: `tradelab-v13`.
 
 ## 5. Sticky-Elemente und Tab-Zuordnung (v6b)
 
@@ -173,3 +173,9 @@ Instrument Serif hat keine Tabellenziffern. Damit Hochzählen nicht springt, fix
 ## 7. Hosting
 
 GitHub Pages: https://vielleicht420.github.io/tradelab/ – siehe `DEPLOY.md`.
+
+## 8. App-Icon (v2 „Ink & Amber“)
+
+* Drei aufsteigende Kerzen in Amber (`#ffcb6b` → `#e9a636`): zwei als Kontur, die letzte gefüllt. Grund warmes Tinten-Schwarz mit leichter radialer Tiefe (`#211d17` → `#0c0b09`). Kein Glas, kein Regenbogen.
+* Quelle: `icons/icon-v2.svg` (auch Favicon). PNGs: `apple-touch-icon-v2.png` 180 (randlos, ohne Transparenz), `icon-192-v2.png`, `icon-512-v2.png`, `icon-maskable-512-v2.png` (Motiv auf 76 % für die Safe-Zone), `favicon-32-v2.png`.
+* Dateinamen mit Versions-Suffix, damit iOS kein altes Icon aus dem Cache nimmt. Bei einem neuen Icon `-v3` usw. verwenden.
