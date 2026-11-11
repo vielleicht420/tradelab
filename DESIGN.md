@@ -153,7 +153,7 @@ Instrument Serif hat keine Tabellenziffern. Damit Hochzählen nicht springt, fix
 * Keine Regenbogen-Verläufe, kein Emoji-Spam, kein schweres Glas.
 * App-Texte auf Deutsch, Du-Form.
 * Kein API-Schlüssel im Code. Der Schlüssel liegt nur im `localStorage` des Geräts.
-* Service-Worker-Cache: `tradelab-v14`.
+* Service-Worker-Cache: `tradelab-v15`.
 
 ## 5. Sticky-Elemente und Tab-Zuordnung (v6b)
 
@@ -180,3 +180,10 @@ GitHub Pages: https://vielleicht420.github.io/tradelab/ – siehe `DEPLOY.md`.
 * Drei aufsteigende Kerzen in Amber (`#ffcb6b` → `#e9a636`): zwei als Kontur, die letzte gefüllt. Grund warmes Tinten-Schwarz mit leichter radialer Tiefe (`#211d17` → `#0c0b09`). Kein Glas, kein Regenbogen.
 * Quelle: `icons/icon-v2.svg` (auch Favicon). PNGs: `apple-touch-icon-v2.png` 180 (randlos, ohne Transparenz), `icon-192-v2.png`, `icon-512-v2.png`, `icon-maskable-512-v2.png` (Motiv auf 76 % für die Safe-Zone), `favicon-32-v2.png`.
 * Dateinamen mit Versions-Suffix, damit iOS kein altes Icon aus dem Cache nimmt. Bei einem neuen Icon `-v3` usw. verwenden.
+
+## 9. KI-Chart-Analyse (Google Gemini, v6f)
+
+* Anbieter: nur Google Gemini (kostenloser Schlüssel aus https://aistudio.google.com/apikey). xAI/OpenAI wurden entfernt.
+* Endpoint: `POST https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent`, Header `x-goog-api-key`. Bild als `inline_data` (JPEG, max. 1600 px, base64), Prompt als `system_instruction`, `responseMimeType: application/json`.
+* Modelle: Standard `gemini-3.8-flash`; bei 429/404/5xx automatischer Wechsel auf `gemini-3.5-flash-lite` (höheres Gratis-Tageslimit). `gemini-2.5-flash` ist abgekündigt (Abschaltung 1.12.2026) und für neue Projekte nicht mehr verfügbar.
+* Schlüssel nur in `localStorage` (`tl_ai`). Fehlertexte auf Deutsch: ungültiger Schlüssel, Limit erreicht (Reset 9 Uhr deutscher Zeit), keine Berechtigung, Modell nicht gefunden, Region, Überlastung, Blockiert.

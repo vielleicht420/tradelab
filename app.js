@@ -503,21 +503,18 @@ V.einstellungen=()=>{const c=getCfg(),ac=LS.get("accent","amber");return{title:"
   <div class="pv-r">${ringS(7,10,74)}</div></div>
  <p class="lead r" style="margin-top:10px">Gilt für Buttons, Tab-Leiste, Ringe und Hervorhebungen. Grün und Rot im Chart bleiben immer gleich – sie bedeuten steigend und fallend.</p>
  ${SH("KI für Chart-Analyse")}
- <div class="frms r"><label class="frm"><span>Anbieter</span><select class="input" id="s_p">${Object.entries(PROV).map(([k,p])=>`<option value="${k}" ${k===c.provider?"selected":""}>${p.n}</option>`).join("")}</select></label>
- <label class="frm"><span>API-Schlüssel</span><input class="input" id="s_k" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" value="${esc(c.key)}" placeholder="xai-… bzw. sk-…"></label>
- <label class="frm"><span>Modell</span><input class="input" id="s_m" autocapitalize="off" spellcheck="false" value="${esc(c.model)}"></label>
- <label class="frm" id="s_bw"><span>Base-URL</span><input class="input" id="s_b" autocapitalize="off" spellcheck="false" value="${esc(c.base)}" placeholder="https://…/v1"></label></div>
+ <div class="frms r"><label class="frm"><span>Gemini API-Key</span><input class="input" id="s_k" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" value="${esc(c.key)}" placeholder="AIza…"></label>
+ <label class="frm"><span>Modell (optional)</span><input class="input" id="s_m" autocapitalize="off" spellcheck="false" value="${esc(c.model)}" placeholder="${GEM.model}"></label></div>
  <div class="btn-row r"><button class="btn" id="s_save">Speichern</button><button class="btn sec" id="s_test">Testen</button></div><button class="btn danger r" id="s_del">Schlüssel löschen</button>
- <div class="quoteT r"><div class="eb a">Datenschutz</div><p>Dein Schlüssel wird nur auf diesem iPhone gespeichert und direkt an den gewählten Anbieter geschickt – an keinen anderen Server.</p></div>
- <article class="lesson r" style="margin-top:6px"><p><b>So bekommst du einen Schlüssel.</b> xAI: <a href="https://console.x.ai" target="_blank" rel="noopener">console.x.ai</a> → Konto anlegen → Guthaben aufladen → „API Keys“ → Key erstellen und hier einfügen. Standardmodell: <span class="kbd">grok-4.7</span>. OpenAI: <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">platform.openai.com/api-keys</a>, Standardmodell <span class="kbd">gpt-6-astra</span>. Eine Analyse kostet meist nur wenige Cent – setz dir beim Anbieter ein Ausgabenlimit.</p></article>
+ <article class="lesson r" style="margin-top:6px"><p><b>Kostenlosen Schlüssel holen – in 3 Schritten.</b></p><ol class="numl"><li><span>01</span><div><b>Öffnen:</b> <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> und mit deinem Google-Konto anmelden.</div></li><li><span>02</span><div><b>Erstellen:</b> „API-Schlüssel erstellen“ tippen (falls gefragt, ein Projekt anlegen). Keine Kreditkarte nötig.</div></li><li><span>03</span><div><b>Einfügen:</b> Schlüssel kopieren (beginnt mit „AIza…“), oben einfügen, Speichern, dann Testen.</div></li></ol><p>Das Modell-Feld kannst du leer lassen – Standard ist <span class="kbd">${GEM.model}</span>. Ist das Tageslimit voll, weicht die App automatisch auf <span class="kbd">${GEM.fallback}</span> aus.</p></article>
+ <div class="quoteT r"><div class="eb a">Datenschutz</div><p>Dein Schlüssel wird nur auf diesem iPhone gespeichert und direkt an Google geschickt – an keinen anderen Server. Im kostenlosen Kontingent darf Google Eingaben zur Verbesserung nutzen, lade also keine privaten Daten hoch.</p></div>
  ${SH("Daten")}
  <div class="rows r"><button class="rw" id="s_rp"><span class="ic">${I.reset}</span><b>Lernfortschritt &amp; Quiz zurücksetzen</b></button><button class="rw" id="s_rk"><span class="ic">${I.cards}</span><b>Karteikarten-Fortschritt zurücksetzen</b></button><button class="rw" id="s_ra"><span class="ic">${I.trash}</span><b>Gespeicherte Analyse löschen</b></button></div>
  ${SH("App")}
  <div class="rows r"><div class="rw"><span class="ic">${I.phone}</span><div><b>Installieren</b><span>Safari → Teilen → Zum Home-Bildschirm. Danach auch offline nutzbar (außer KI-Analyse).</span></div></div><div class="rw"><span class="ic">${I.info}</span><div><b>TradeLab 6.1</b><span>Inhalte Stand November 2026 · Keine Anlageberatung</span><span id="s_vh" style="opacity:.6;font-size:12px"></span></div></div></div>`,
  after(v){{const e=$("#s_vh",v),x=window.__vh&&window.__vh();if(e&&x)e.textContent=` · Anzeige ${x.iw}×${x.ih} · Bildschirm ${x.sw}×${x.sh} · ${x.sa?"Home-Bildschirm-App":"Browser"} · Safe-Area ${x.sab.trim()||"0px"} · Ausgleich ${x.bfix.trim()}`}$$("[data-acc]",v).forEach(b=>b.onclick=()=>{LS.set("accent",b.dataset.acc);applyAccent(b.dataset.acc);$$("[data-acc]",v).forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-checked",x===b)});
    b.classList.remove("pop");void b.offsetWidth;b.classList.add("pop");const pr=$(".prev",v);pr.classList.remove("flash");void pr.offsetWidth;pr.classList.add("flash");try{navigator.vibrate&&navigator.vibrate(6)}catch(e){}});
-  const upd=()=>{const p=$("#s_p",v).value;$("#s_m",v).placeholder=PROV[p].model||"Modellname";$("#s_bw",v).style.display=p==="custom"?"":"none"};upd();$("#s_p",v).onchange=upd;
-  const read=()=>({provider:$("#s_p",v).value,key:$("#s_k",v).value.trim(),model:$("#s_m",v).value.trim(),base:$("#s_b",v).value.trim().replace(/\/+$/,"")});
+  const read=()=>({provider:"gemini",key:$("#s_k",v).value.trim(),model:$("#s_m",v).value.trim()});
   $("#s_save",v).onclick=()=>{LS.set("ai",read());toast("Gespeichert")};
   $("#s_del",v).onclick=()=>{const c=read();c.key="";LS.set("ai",c);$("#s_k",v).value="";toast("Schlüssel gelöscht")};
   $("#s_test",v).onclick=async e=>{const b=e.currentTarget;LS.set("ai",read());b.disabled=true;b.textContent="Teste …";try{const t=await callAI(null,"Antworte nur mit dem Wort OK.",true);toast("Verbindung ok · "+String(t).trim().slice(0,20))}catch(err){toast("Fehler: "+err.message)}b.disabled=false;b.textContent="Testen"};
@@ -546,8 +543,8 @@ function RECHNER_AFTER(v){const c=LS.get("calc",{bal:1000,risk:1,sl:20,inst:"EUR
    const tot=Math.pow(1+rr/100*r,100*w)*Math.pow(1-rr/100,100*(1-w));tw($("#o_100",v),(tot-1)*100,x=>(x>=0?"+":"")+fmt(x,0)+" %");$("#o_100",v).style.color=tot>=1?"var(--green)":"var(--red)";
    const ls=Math.round(Math.log(100)/-Math.log(1-w));$("#o_ls",v).innerHTML=`Bei ${fmt(w*100,0)} % Trefferquote musst du in 100 Trades mit einer Verlustserie von etwa <b>${ls} Trades</b> rechnen (Faustformel). Mit ${fmt(rr,1)} % Risiko sind das ca. <b>${fmt((1-Math.pow(1-rr/100,ls))*100,1)} %</b> Drawdown. Kosten sind nicht eingerechnet.`}};
  $$("input,select",v).forEach(e=>e.addEventListener("input",calc));calc()}
-const PROV={xai:{n:"xAI (Grok)",model:"grok-4.7",url:"https://api.x.ai/v1/responses"},openai:{n:"OpenAI",model:"gpt-6-astra",url:"https://api.openai.com/v1/responses"},custom:{n:"Eigener Endpoint (OpenAI-kompatibel)",model:"",url:""}};
-const getCfg=()=>LS.get("ai",{provider:"xai",key:"",model:"",base:""});
+const GEM={model:"gemini-3.8-flash",fallback:"gemini-3.5-flash-lite",url:m=>"https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(m)+":generateContent"};
+const getCfg=()=>{const c=LS.get("ai",{provider:"gemini",key:"",model:""});return c.provider==="gemini"?{provider:"gemini",key:c.key||"",model:c.model||""}:{provider:"gemini",key:"",model:""}};
 /* ---------- KI ---------- */
 const SYS=`Du bist ein erfahrener, nüchterner Chart-Analyst und Trading-Lehrer für einen Anfänger. Du bekommst ein Foto oder einen Screenshot eines Kurscharts (oft MetaTrader 5 auf dem iPhone).
 Analysiere es so genau wie möglich: Trend und Marktstruktur (Hochs/Tiefs), wichtige Unterstützungen/Widerstände, Zonen, Trendlinien, Kerzen- und Chartmuster, sichtbare Indikatoren. Gib 1-2 mögliche Trade-Szenarien (Long und/oder Short) mit Einstieg, Stop-Loss und Ziel, jeweils mit Auslöser-Bedingung. Sei ehrlich, wenn das Bild unklar ist oder es kein gutes Setup gibt ("kein Trade" ist eine gültige Antwort; dann szenarien leer lassen oder als Beobachtung formulieren).
@@ -562,22 +559,29 @@ Antworte AUSSCHLIESSLICH mit einem gültigen JSON-Objekt (kein Markdown, kein Te
 "szenarien":[{"name":"","richtung":"long|short","ausloeser":"","entry":{"y":0.5,"preis":""},"stop":{"y":0.55,"preis":""},"ziel":{"y":0.4,"preis":""},"crv":"1:2","wahrscheinlichkeit":"niedrig|mittel|hoch"}],
 "risiken":["…"],"lernhinweis":"ein konkreter Lerntipp zu diesem Chart","konfidenz":60,"bildqualitaet":"gut|mittel|schlecht – kurz warum"}
 Maximal 6 levels, 3 zonen, 3 trendlinien, 4 muster, 2 szenarien. Wenn kein Chart erkennbar ist: ist_chart=false und erkläre es in zusammenfassung.`;
-async function callAI(dataUrl,text,test){const c=getCfg();if(!c.key)throw new Error("Kein API-Schlüssel – bitte in den Einstellungen eintragen.");
- const P=PROV[c.provider]||PROV.xai;const model=c.model||P.model;const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),180000);
- try{let url,body;
-  if(c.provider==="custom"){if(!c.base||!model)throw new Error("Base-URL und Modell eintragen.");url=c.base+"/chat/completions";
-   const content=[{type:"text",text}];if(dataUrl)content.push({type:"image_url",image_url:{url:dataUrl,detail:"high"}});
-   body={model,messages:test?[{role:"user",content:text}]:[{role:"system",content:SYS},{role:"user",content}]}}
-  else{url=P.url;const content=[{type:"input_text",text}];if(dataUrl)content.push({type:"input_image",image_url:dataUrl,detail:"high"});
-   body={model,store:false,input:test?[{role:"user",content:text}]:[{role:"system",content:SYS},{role:"user",content}]}}
-  const r=await fetch(url,{method:"POST",signal:ctl.signal,headers:{"Content-Type":"application/json","Authorization":"Bearer "+c.key},body:JSON.stringify(body)});
-  const raw=await r.text();let d;try{d=JSON.parse(raw)}catch(e){d={}}
-  if(!r.ok){const m=(d.error&&(d.error.message||d.error))||d.message||raw.slice(0,200);throw new Error(r.status+": "+(typeof m==="string"?m:JSON.stringify(m)))}
-  if(c.provider==="custom")return(d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content)||"";
-  if(typeof d.output_text==="string"&&d.output_text)return d.output_text;
-  return(d.output||[]).flatMap(o=>o.content||[]).filter(x=>x.type==="output_text"||x.type==="text").map(x=>x.text).join("")}
- catch(e){if(e.name==="AbortError")throw new Error("Zeitüberschreitung – bitte nochmal versuchen.");if(e instanceof TypeError)throw new Error("Netzwerkfehler – Internet prüfen.");throw e}
- finally{clearTimeout(to)}}
+function gemErr(st,d,raw){const e=(d&&d.error)||{};const m=String(e.message||raw||"");const det=JSON.stringify(e.details||"");
+ if(/API_KEY_INVALID|API key not valid|API key expired/i.test(m+det))return "Der API-Schlüssel ist ungültig. Bitte in AI Studio neu kopieren und komplett einfügen.";
+ if(st===429||e.status==="RESOURCE_EXHAUSTED")return "Kostenloses Limit erreicht. Warte kurz oder versuch es morgen wieder (Tageslimit wird um 9 Uhr deutscher Zeit zurückgesetzt).";
+ if(st===403||e.status==="PERMISSION_DENIED")return "Dieser Schlüssel darf die Gemini API nicht nutzen. Erstelle in AI Studio einen neuen Schlüssel.";
+ if(st===404||e.status==="NOT_FOUND")return "Modell nicht gefunden. Lass das Feld „Modell“ in den Einstellungen leer.";
+ if(/location is not supported|User location/i.test(m))return "Gemini ist in deiner Region gerade nicht verfügbar.";
+ if(st===400)return "Anfrage abgelehnt ("+(e.status||400)+"). Versuch es mit einem anderen Bild.";
+ if(st>=500)return "Gemini ist gerade überlastet. Bitte gleich nochmal versuchen.";
+ return "Fehler "+st+": "+m.slice(0,160)}
+async function callAI(dataUrl,text,test){const c=getCfg();if(!c.key)throw new Error("Kein Gemini API-Key – bitte in den Einstellungen eintragen.");
+ const parts=[];if(dataUrl){const mm=/^data:([^;]+);base64,(.*)$/.exec(dataUrl);if(!mm)throw new Error("Bild konnte nicht gelesen werden.");parts.push({inline_data:{mime_type:mm[1],data:mm[2]}})}parts.push({text});
+ const body={contents:[{role:"user",parts}],generationConfig:test?{maxOutputTokens:20}:{responseMimeType:"application/json",temperature:.3}};if(!test)body.system_instruction={parts:[{text:SYS}]};
+ const models=c.model?[c.model]:[GEM.model,GEM.fallback];
+ for(let i=0;i<models.length;i++){const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),180000);
+  try{const r=await fetch(GEM.url(models[i]),{method:"POST",signal:ctl.signal,headers:{"Content-Type":"application/json","x-goog-api-key":c.key},body:JSON.stringify(body)});
+   const raw=await r.text();let d;try{d=JSON.parse(raw)}catch(e){d={}}
+   if(!r.ok){if((r.status===429||r.status===404||r.status>=500)&&i<models.length-1)continue;throw new Error(gemErr(r.status,d,raw))}
+   if(d.promptFeedback&&d.promptFeedback.blockReason)throw new Error("Gemini hat das Bild abgelehnt ("+d.promptFeedback.blockReason+"). Versuch einen anderen Screenshot.");
+   const cand=(d.candidates||[])[0]||{};const t=((cand.content&&cand.content.parts)||[]).filter(p=>!p.thought&&typeof p.text==="string").map(p=>p.text).join("");
+   if(!t){if(cand.finishReason==="SAFETY")throw new Error("Gemini hat die Antwort blockiert. Versuch einen anderen Screenshot.");if(test)return "OK";throw new Error("Gemini hat keine Antwort geliefert. Bitte nochmal versuchen.")}
+   return t}
+  catch(e){if(e.name==="AbortError")throw new Error("Zeitüberschreitung – bitte nochmal versuchen.");if(e instanceof TypeError)throw new Error("Netzwerkfehler – Internet prüfen.");throw e}
+  finally{clearTimeout(to)}}}
 function parseJSON(t){t=String(t).replace(/```json|```/g,"");const a=t.indexOf("{"),b=t.lastIndexOf("}");if(a<0||b<0)throw new Error("Die KI hat kein gültiges Ergebnis geliefert. Bitte nochmal versuchen.");return JSON.parse(t.slice(a,b+1))}
 function loadImg(src){return new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=()=>rej(new Error("Bild konnte nicht geladen werden"));i.src=src})}
 async function fileToDataUrl(f){const url=URL.createObjectURL(f);try{const img=await loadImg(url);const M=1600,s=Math.min(1,M/Math.max(img.naturalWidth,img.naturalHeight));const cv=document.createElement("canvas");cv.width=Math.round(img.naturalWidth*s);cv.height=Math.round(img.naturalHeight*s);cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);return cv.toDataURL("image/jpeg",.86)}finally{URL.revokeObjectURL(url)}}
@@ -636,7 +640,7 @@ function demoChart(){const W=1170,H=1500,cv=document.createElement("canvas");cv.
 let cur=null;
 V.analyse=()=>{const c=getCfg();if(!cur){const l=LS.get("last",null);if(l)cur=l}
  return{title:"Analyse",html:`${EB("KI-Werkzeug","a","margin-top:6px")}<h1 class="lt r">Chart-<i>Analyse</i></h1><p class="lead r">Foto oder Screenshot deines Charts – die KI zeichnet Zonen, Linien und Szenarien ein.</p>
- ${c.key?"":`<div class="group ic-rows">${cell("#/einstellungen",I.key,"API-Schlüssel einrichten","Für echte Analysen (xAI oder OpenAI). Das Beispiel geht ohne.")}</div>`}
+ ${c.key?"":`<div class="group ic-rows">${cell("#/einstellungen",I.key,"API-Schlüssel einrichten","Für echte Analysen – kostenloser Gemini-Schlüssel. Das Beispiel geht ohne.")}</div>`}
  <div class="card upl"><div class="eb a">Chart hochladen</div><p style="color:var(--read);font-size:15px;line-height:22px">Am besten ein <b>Screenshot</b> aus MT5 (Seitentaste + Lauter). Preisachse sichtbar lassen.</p>
  <div class="btn-row"><label class="btn">${I.camera}Kamera<input type="file" accept="image/*" capture="environment" id="a_cam" hidden></label><label class="btn sec">${I.image}Galerie<input type="file" accept="image/*" id="a_gal" hidden></label></div>
  <button class="btn ghost" id="a_demo">${I.spark}Beispiel ansehen</button>
