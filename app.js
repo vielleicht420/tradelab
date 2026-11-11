@@ -528,7 +528,7 @@ V.einstellungen=()=>{const c=getCfg(),ac=LS.get("accent","amber");return{title:"
  ${SH("Daten")}
  <div class="rows r"><button class="rw" id="s_rp"><span class="ic">${I.reset}</span><b>Lernfortschritt &amp; Quiz zurücksetzen</b></button><button class="rw" id="s_rk"><span class="ic">${I.cards}</span><b>Karteikarten-Fortschritt zurücksetzen</b></button><button class="rw" id="s_ra"><span class="ic">${I.trash}</span><b>Gespeicherte Analyse löschen</b></button></div>
  ${SH("App")}
- <div class="rows r"><div class="rw"><span class="ic">${I.phone}</span><div><b>Installieren</b><span>Safari → Teilen → Zum Home-Bildschirm. Danach auch offline nutzbar (außer KI-Analyse).</span></div></div><div class="rw"><span class="ic">${I.info}</span><div><b>TradeLab 6.1</b><span>Inhalte Stand November 2026 · Keine Anlageberatung</span><span id="s_vh" style="opacity:.6;font-size:12px"></span></div></div></div>`,
+ <div class="rows r"><div class="rw"><span class="ic">${I.phone}</span><div><b>Installieren</b><span>Safari → Teilen → Zum Home-Bildschirm. Danach auch offline nutzbar (außer KI-Analyse).</span></div></div><div class="rw"><span class="ic">${I.info}</span><div><b>TradeLab 6.2</b><span>Inhalte Stand November 2026 · Keine Anlageberatung</span><span id="s_vh" style="opacity:.6;font-size:12px"></span></div></div></div>`,
  after(v){{const e=$("#s_vh",v),x=window.__vh&&window.__vh();if(e&&x)e.textContent=` · Anzeige ${x.iw}×${x.ih} · Bildschirm ${x.sw}×${x.sh} · ${x.sa?"Home-Bildschirm-App":"Browser"} · Modus ${x.mode} · Safe-Area oben ${(x.sat||"").trim()||"0px"} · html ${x.hh} · Safe-Area unten ${x.sab.trim()||"0px"} · Abstand Tab-Leiste ${x.gap}px`}$$("[data-acc]",v).forEach(b=>b.onclick=()=>{LS.set("accent",b.dataset.acc);applyAccent(b.dataset.acc);$$("[data-acc]",v).forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-checked",x===b)});
    b.classList.remove("pop");void b.offsetWidth;b.classList.add("pop");const pr=$(".prev",v);pr.classList.remove("flash");void pr.offsetWidth;pr.classList.add("flash");try{navigator.vibrate&&navigator.vibrate(6)}catch(e){}});
   const read=()=>({provider:"gemini",key:$("#s_k",v).value.trim(),model:$("#s_m",v).value.trim()});
@@ -574,7 +574,8 @@ Antworte AUSSCHLIESSLICH mit einem gültigen JSON-Objekt (kein Markdown, kein Te
 "muster":[{"name":"","x":0.5,"y":0.5,"bedeutung":"bullisch|bärisch|neutral","beschreibung":""}],
 "indikatoren":["kurze Beobachtung je Indikator"],
 "szenarien":[{"name":"","richtung":"long|short","ausloeser":"","entry":{"y":0.5,"preis":""},"stop":{"y":0.55,"preis":""},"ziel":{"y":0.4,"preis":""},"crv":"1:2","wahrscheinlichkeit":"niedrig|mittel|hoch"}],
-"risiken":["…"],"lernhinweis":"ein konkreter Lerntipp zu diesem Chart","konfidenz":60,"bildqualitaet":"gut|mittel|schlecht – kurz warum"}
+"risiken":["…"],"lernhinweis":"ein konkreter Lerntipp zu diesem Chart","antwort_frage":"direkte Antwort auf die Frage des Nutzers oder null","konfidenz":60,"bildqualitaet":"gut|mittel|schlecht – kurz warum"}
+FRAGE DES NUTZERS: Steht in der Nachricht eine Frage (nicht "-"), beantworte sie in "antwort_frage" direkt und konkret in 2-4 einfachen Sätzen für einen Anfänger. Beziehe dich genau auf die Frage und auf diesen Chart: z. B. bei "Long oder Short?" sag, wohin der Chart eher tendiert und warum (Struktur, Level), oder dass Abwarten gerade besser ist und worauf man wartet. Schließe mit einem kurzen Hinweis zu Risiko oder Lernen (z. B. Stop setzen, max. 1 % riskieren). Keine Garantie, keine sichere Empfehlung, keine Anlageberatung versprechen. Ohne Frage: "antwort_frage": null.
 Maximal 6 levels, 3 zonen, 3 trendlinien, 4 muster, 2 szenarien. Wenn kein Chart erkennbar ist: ist_chart=false und erkläre es in zusammenfassung.`;
 function gemErr(st,d,raw){const e=(d&&d.error)||{};const m=String(e.message||raw||"");const det=JSON.stringify(e.details||"");
  if(/API_KEY_INVALID|API key not valid|API key expired/i.test(m+det))return "Der API-Schlüssel ist ungültig. Bitte in AI Studio neu kopieren und komplett einfügen.";
@@ -651,9 +652,17 @@ function demoChart(){const W=1170,H=1500,cv=document.createElement("canvas");cv.
   szenarien:[{name:"Pullback-Long an der Kaufzone",richtung:"long",ausloeser:"Kurs fällt in die Kaufzone und bildet dort eine bullische H1-Kerze (Pin Bar oder Engulfing).",entry:{y:fy(sup+0.0003),preis:pr(sup+0.0003)},stop:{y:fy(sup-0.0010),preis:pr(sup-0.0010)},ziel:{y:fy(sup+0.0029),preis:pr(sup+0.0029)},crv:"1:2",wahrscheinlichkeit:"mittel"},
    {name:"Short nur bei Trendbruch",richtung:"short",ausloeser:"Erst wenn eine H1-Kerze klar unter "+pr(c[l1][2])+" schließt.",entry:{y:fy(c[l1][2]-0.0002),preis:pr(c[l1][2]-0.0002)},stop:{y:fy(c[l1][2]+0.0010),preis:pr(c[l1][2]+0.0010)},ziel:{y:fy(c[l1][2]-0.0026),preis:pr(c[l1][2]-0.0026)},crv:"1:2",wahrscheinlichkeit:"niedrig"}],
   risiken:["US-News um 14:30 können die Zone einfach durchschlagen.","Nicht blind in den Rücksetzer kaufen – Bestätigungskerze abwarten."],
-  lernhinweis:"Lehrbuch-Rollentausch: Ein gebrochener Widerstand wird zur Unterstützung. Genau dort setzt die Trendfolge-Strategie (Platz 1) an.",konfidenz:68,bildqualitaet:"gut – simulierter Beispielchart",_demo:true};
+  lernhinweis:"Lehrbuch-Rollentausch: Ein gebrochener Widerstand wird zur Unterstützung. Genau dort setzt die Trendfolge-Strategie (Platz 1) an.",konfidenz:68,bildqualitaet:"gut – simulierter Beispielchart",_demo:true,
+  antwort_frage:"Der Chart tendiert eher nach oben: höhere Hochs und höhere Tiefs, und das alte Hoch bei "+pr(sup)+" hält gerade als Unterstützung. Ein Long wäre aber erst sinnvoll, wenn der Kurs in die Kaufzone kommt und dort eine bullische Kerze schließt – jetzt mitten in der Korrektur zu kaufen ist eher Raten. Setz den Stop unter die Zone und riskiere höchstens 1 % deines Kontos; schließt H1 unter "+pr(c[l1][2])+", ist die Long-Idee hinfällig."};
  return{url:cv.toDataURL("image/jpeg",.9),a}}
 /* ---------- Analyse-View ---------- */
+const DEMO_Q="Soll ich hier long gehen?";
+function qaText(a,q){const t=String(a.antwort_frage||"").trim();if(t&&t!=="null")return t;
+ if(a.ist_chart===false)return "Auf dem Bild war kein Chart erkennbar, deshalb kann die KI deine Frage nicht beantworten. Lade einen Screenshot mit sichtbaren Kerzen und Preisachse hoch und frag nochmal.";
+ const tr=a.trend||{},s=(a.szenarien||[])[0];let x="Die KI hat deine Frage nicht direkt beantwortet. Aus der Analyse: ";
+ x+=tr.richtung?`Der Trend ist ${tr.richtung}${tr.staerke?" ("+tr.staerke+")":""}. `:"Die Richtung ist unklar. ";
+ x+=s?`Das wahrscheinlichste Szenario ist „${s.name||s.richtung}“ – aber erst mit Bestätigung${s.ausloeser?": "+String(s.ausloeser).replace(/\.$/,""):""}. `:"Ein klares Setup gibt es gerade nicht – Abwarten ist auch eine Entscheidung. ";
+ return x+"Riskiere pro Trade höchstens 1 % und setz immer einen Stop.";}
 let cur=null;
 V.analyse=()=>{const c=getCfg();if(!cur){const l=LS.get("last",null);if(l)cur=l}
  return{title:"Analyse",html:`${EB("KI-Werkzeug","a","margin-top:6px")}<h1 class="lt r">Chart-<i>Analyse</i></h1><p class="lead r">Foto oder Screenshot deines Charts – die KI zeichnet Zonen, Linien und Szenarien ein.</p>
@@ -671,19 +680,21 @@ V.analyse=()=>{const c=getCfg();if(!cur){const l=LS.get("last",null);if(l)cur=l}
    if(!getCfg().key){out.innerHTML=`<div class="card fadein"><img src="${url}" style="width:100%;border-radius:12px;display:block"><div class="warn"><b>Fast geschafft</b>Trag in den <a href="#/einstellungen">Einstellungen</a> deinen API-Schlüssel ein – danach wird dieses Bild automatisch analysiert.</div></div>`;LS.set("pending",url);return}
    runAnalysis(out,url,v)};
   $("#a_cam",v).onchange=onFile;$("#a_gal",v).onchange=onFile;
-  $("#a_demo",v).onclick=()=>{const d=demoChart();cur={img:d.url,a:d.a};layers.sz=0;showResult(out,cur).then(()=>v.scrollTo({top:out.offsetTop-90,behavior:reduce?"auto":"smooth"}))};
+  $("#a_demo",v).onclick=()=>{const d=demoChart();cur={img:d.url,a:d.a,q:DEMO_Q};layers.sz=0;showResult(out,cur).then(()=>v.scrollTo({top:out.offsetTop-90,behavior:reduce?"auto":"smooth"}))};
   const pend=LS.get("pending",null);if(pend&&getCfg().key){LS.del("pending");runAnalysis(out,pend,v)}}}};
 async function runAnalysis(out,url,v){out.innerHTML=`<div class="card fadein"><div class="canvas-wrap"><img src="${url}" style="width:100%;display:block;opacity:.6"><div class="scan"></div></div><div class="loader"><div class="spinner"></div><div style="font-weight:600;margin-top:6px">Analysiere Chart …</div><div class="muted">Das kann 10–60 Sekunden dauern.</div></div></div>`;
  v.scrollTo({top:out.offsetTop-90,behavior:reduce?"auto":"smooth"});
  const val=id=>{const e=$("#"+id,v);return e&&e.value.trim()};
- const meta=[`Symbol laut Nutzer: ${val("a_sym")||"unbekannt"}`,`Zeitrahmen laut Nutzer: ${val("a_tf")||"unbekannt"}`,`Frage des Nutzers: ${val("a_q")||"-"}`,`Aktuelle Zeit (Berlin): ${new Date().toLocaleString("de-DE",{timeZone:"Europe/Berlin"})}`].join("\n");
- try{const t=await callAI(url,"Analysiere diesen Chart.\n"+meta);const a=parseJSON(t);cur={img:url,a};LS.set("last",cur);layers.sz=0;await showResult(out,cur)}
+ const q=(val("a_q")||"").slice(0,300);
+ const meta=[`Symbol laut Nutzer: ${val("a_sym")||"unbekannt"}`,`Zeitrahmen laut Nutzer: ${val("a_tf")||"unbekannt"}`,`Frage des Nutzers: ${q||"-"}`,`Aktuelle Zeit (Berlin): ${new Date().toLocaleString("de-DE",{timeZone:"Europe/Berlin"})}`].join("\n");
+ try{const t=await callAI(url,"Analysiere diesen Chart.\n"+meta);const a=parseJSON(t);cur={img:url,a,q};LS.set("last",cur);layers.sz=0;await showResult(out,cur)}
  catch(e){out.innerHTML=`<div class="card warn fadein"><b>Analyse fehlgeschlagen</b>${esc(e.message)}<button class="btn sec" id="a_retry" style="margin-top:12px">Nochmal versuchen</button></div>`;$("#a_retry",out).onclick=()=>runAnalysis(out,url,v)}}
 async function showResult(out,r){const a=r.a||{};const img=await loadImg(r.img);
  const sz=a.szenarien||[];const tr=a.trend||{};const trCol=/auf/.test(tr.richtung)?"g":/ab/.test(tr.richtung)?"r":"";
  const chip=(k,l)=>`<button class="fchip ${layers[k]?"on":""}" data-l="${k}">${l}</button>`;
  const conf=Math.max(0,Math.min(100,+a.konfidenz||0));
  out.innerHTML=`<div class="fadein"><div class="eb" style="margin:26px 4px 10px">${a._demo?"Beispiel-Analyse (simuliert)":"Ergebnis"}</div>
+ ${r.q?`<div class="card qa"><div class="eb a">Antwort auf deine Frage</div><p class="qa-q">„${esc(r.q)}“</p><p class="qa-a">${esc(qaText(a,r.q))}</p></div>`:""}
  <div class="card tight"><div class="canvas-wrap"><canvas id="a_cv"></canvas></div>
  <div class="layer-row">${chip("levels","Levels")}${chip("zonen","Zonen")}${chip("trendlinien","Trendlinien")}${chip("muster","Muster")}${sz.map((s,i)=>`<button class="fchip ${layers.sz===i?"on":""}" data-sz="${i}">Szenario ${i+1}</button>`).join("")}</div></div>
  ${a.ist_chart===false?`<div class="card warn"><b>Kein Chart erkannt</b>${esc(a.zusammenfassung)}</div>`:`

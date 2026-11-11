@@ -155,7 +155,7 @@ Instrument Serif hat keine Tabellenziffern. Damit Hochzählen nicht springt, fix
 * Keine Regenbogen-Verläufe, kein Emoji-Spam, kein schweres Glas.
 * App-Texte auf Deutsch, Du-Form.
 * Kein API-Schlüssel im Code. Der Schlüssel liegt nur im `localStorage` des Geräts.
-* Service-Worker-Cache: `tradelab-v19`.
+* Service-Worker-Cache: `tradelab-v20`.
 
 ## 5. Sticky-Elemente und Tab-Zuordnung (v6b)
 
@@ -209,3 +209,9 @@ GitHub Pages: https://vielleicht420.github.io/tradelab/ – siehe `DEPLOY.md`.
 - Ebenen (story_patch.py): `.k.ctx/.pat/.fol`, `.f-box`, `.f-hl`, `.zn`, `.trd`, `.fla`, `.ann` (O/H/L/C), `.gh` (Geister-Kerze), `.mis`; Formationen `.lv`, `.pth`, `.brk`, `.brk-r`. Nur Opacity/Transform-Übergänge; reduced-motion schaltet sie ab.
 - Trade-Plan: Beim Erreichen des Plan-Abschnitts werden Entry/Stop/Ziel automatisch eingeblendet (falls nicht manuell bedient), beim Verlassen wieder aus. Kein Auto-Scroll mehr beim Tippen einer Plan-Zeile, weil der Chart sichtbar bleibt.
 - Strategie-Seiten haben keinen Chart → unverändert.
+
+
+## 13. Antwort auf die Frage (Analyse, v20)
+- Gemini-Schema hat `antwort_frage` (2–4 einfache Sätze, direkt zur Frage, mit Risiko-/Lernhinweis, keine Garantie; ohne Frage `null`).
+- Die Frage wird in `cur.q` gespeichert (LS "last"). `showResult` zeigt bei Frage direkt unter der Chart-Karte die Karte `.card.qa` „Antwort auf deine Frage“: Frage als gedämpftes Zitat (Serif kursiv), darunter die Antwort. Amber-Akzentstreifen links, kein Blur.
+- Fehlt `antwort_frage`, baut `qaText()` eine Antwort aus Trend und erstem Szenario (bzw. Hinweis bei „kein Chart“). Die Demo-Analyse hat die Beispielfrage „Soll ich hier long gehen?“.

@@ -1,4 +1,4 @@
-const V="tradelab-v19";
+const V="tradelab-v20";
 const ASSETS=["./","./index.html","./styles.css","./app.js","./content-learn.js","./content-candles.js","./content-misc.js","./manifest.json","./icons/icon-192-v2.png","./icons/icon-512-v2.png","./icons/icon-maskable-512-v2.png","./icons/icon-v2.svg","./icons/apple-touch-icon-v2.png","./icons/favicon-32-v2.png","./fonts/instrument-serif-latin-400-normal.woff2","./fonts/instrument-serif-latin-400-italic.woff2","./fonts/inter-latin-wght-normal.woff2","./fonts/inter-tight-latin-wght-normal.woff2","./fonts/nunito-latin-wght-normal.woff2"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(ASSETS.map(u=>new Request(u,{cache:"reload"})))).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==V).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});

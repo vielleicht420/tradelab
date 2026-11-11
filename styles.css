@@ -821,3 +821,10 @@ body:not(.train) .topbar{transform:none;opacity:1;filter:none}
 .pat-svg[data-focus="note"] .brk-r{transform-box:fill-box;transform-origin:50% 50%;animation:stRing 1.6s var(--ease) infinite}
 @keyframes stRing{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.6);opacity:0}}
 @media (prefers-reduced-motion:reduce){.pat-svg *{transition:none!important}.pat-svg[data-focus] .cd,.pat-svg .brk-r{animation:none!important}.pc-cap{transition:none}}
+
+/* v20: Antwort auf die Nutzerfrage (Analyse) */
+.card.qa{padding:18px 18px 18px 22px;border-color:rgba(242,180,72,.28);background:linear-gradient(0deg,rgba(242,180,72,.045),rgba(242,180,72,.045)),var(--s1)}
+.card.qa:before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:3px;border-radius:0 2px 2px 0;background:var(--acc)}
+.card.qa .eb{margin-bottom:10px}
+.qa-q{margin:0 0 10px;padding-left:12px;border-left:1px solid #34312b;color:var(--t2);font:italic 400 15px/21px var(--serif)}
+.qa-a{margin:0;color:var(--t1);font-size:16px;line-height:24px}
