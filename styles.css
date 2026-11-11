@@ -779,3 +779,45 @@ html.sa-short{--tbb:10px}
 .topbar:not(.hide){transform:none}
 body:not(.train) .topbar{transform:none;opacity:1;filter:none}
 .topbar .nav-btn,.topbar .tb-title{filter:none;text-shadow:none}
+
+/* v6j: Klebender Chart + Scrollytelling auf Muster-/Formations-Seiten */
+.plan-card[data-kind]{position:sticky;top:calc(var(--sat) + var(--nav));z-index:8;background:var(--well);border-top:1px solid var(--hair);border-bottom:1px solid #2a2722}
+.plan-card[data-kind] .pat-svg{display:block;width:100%;height:auto;max-height:min(290px,31vh);margin:0 auto}
+.plan-card.stuck{border-top-color:transparent}
+.pc-cap{position:absolute;left:12px;top:8px;display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:12px;background:#1d1b17;border:1px solid #34312b;font:600 11.5px/14px var(--ui);color:var(--t1);opacity:0;transform:translateY(-4px);transition:opacity .25s,transform .25s;pointer-events:none}
+.pc-cap em{font:700 11px var(--num);font-style:normal;color:var(--acc)}
+.pc-cap.on{opacity:1;transform:none}
+.art h3[data-st]{transition:color .3s}
+.art h3[data-st] em{transition:background .3s,color .3s;padding:2px 7px;border-radius:8px;margin-left:-7px}
+.art h3.st-on em{background:var(--acc);color:var(--acc-ink)}
+/* Ebenen im Chart */
+.pat-svg .k,.pat-svg .f-box,.pat-svg .f-hl,.pat-svg .trd,.pat-svg .fla,.pat-svg .zn,.pat-svg .ann,.pat-svg .gh,.pat-svg .mis,.pat-svg .lv,.pat-svg .pth,.pat-svg .brk,.pat-svg .brk-r{transition:opacity .4s var(--ease)}
+.pat-svg .zn,.pat-svg .ann,.pat-svg .gh,.pat-svg .mis,.pat-svg .brk,.pat-svg .brk-r{opacity:0}
+.pat-svg[data-focus="pat"] .k.ctx,.pat-svg[data-focus="pat"] .k.fol{opacity:.12}
+.pat-svg[data-focus="pat"] .trd,.pat-svg[data-focus="pat"] .fla,.pat-svg[data-focus="pat"] .f-hl{opacity:.12}
+.pat-svg[data-focus="pat"] .ann{opacity:1}
+.pat-svg[data-focus="pat"] .f-box rect{stroke:var(--acc);stroke-opacity:.9}
+.pat-svg[data-focus="where"] .k.ctx{opacity:1}
+.pat-svg[data-focus="where"] .k.pat{opacity:.5}
+.pat-svg[data-focus="where"] .k.fol,.pat-svg[data-focus="where"] .fla,.pat-svg[data-focus="where"] .f-box{opacity:.1}
+.pat-svg[data-focus="where"] .zn{opacity:1}
+.pat-svg[data-focus="where"] .trd line,.pat-svg[data-focus="where"] .trd path{stroke:#e9e1d3}
+.pat-svg[data-focus="confirm"] .k.ctx,.pat-svg[data-focus="confirm"] .trd,.pat-svg[data-focus="confirm"] .f-hl{opacity:.12}
+.pat-svg[data-focus="confirm"] .k.pat{opacity:.55}
+.pat-svg[data-focus="confirm"] .k.fol,.pat-svg[data-focus="confirm"] .fla,.pat-svg[data-focus="confirm"] .gh{opacity:1}
+.pat-svg[data-focus="confirm"] .k.fol .cd{animation:stConf .6s var(--spring) both}
+.pat-svg[data-focus="confirm"] .k.fol+.k.fol .cd{animation-delay:.12s}
+@keyframes stConf{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+.pat-svg[data-focus="mistake"] .k.ctx,.pat-svg[data-focus="mistake"] .k.fol{opacity:.05}
+.pat-svg[data-focus="mistake"] .trd,.pat-svg[data-focus="mistake"] .fla,.pat-svg[data-focus="mistake"] .f-hl{opacity:.05}
+.pat-svg[data-focus="mistake"] .k.pat{opacity:.45}
+.pat-svg[data-focus="mistake"] .f-box rect{stroke:#ff7f66;stroke-opacity:.8}
+.pat-svg[data-focus="mistake"] .mis{opacity:1}
+.pat-svg[data-focus="plan"] .k.ctx{opacity:.3}.pat-svg[data-focus="plan"] .trd{opacity:.4}
+.pat-svg[data-focus="what"] .lv line{stroke-width:2.4}
+.pat-svg[data-focus="what"] .lv{opacity:1}
+.pat-svg[data-focus="note"] .pth{opacity:.35}.pat-svg[data-focus="note"] .lv{opacity:.55}
+.pat-svg[data-focus="note"] .brk,.pat-svg[data-focus="note"] .brk-r{opacity:1}
+.pat-svg[data-focus="note"] .brk-r{transform-box:fill-box;transform-origin:50% 50%;animation:stRing 1.6s var(--ease) infinite}
+@keyframes stRing{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.6);opacity:0}}
+@media (prefers-reduced-motion:reduce){.pat-svg *{transition:none!important}.pat-svg[data-focus] .cd,.pat-svg .brk-r{animation:none!important}.pc-cap{transition:none}}

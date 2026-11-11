@@ -155,7 +155,7 @@ Instrument Serif hat keine Tabellenziffern. Damit Hochzählen nicht springt, fix
 * Keine Regenbogen-Verläufe, kein Emoji-Spam, kein schweres Glas.
 * App-Texte auf Deutsch, Du-Form.
 * Kein API-Schlüssel im Code. Der Schlüssel liegt nur im `localStorage` des Geräts.
-* Service-Worker-Cache: `tradelab-v18`.
+* Service-Worker-Cache: `tradelab-v19`.
 
 ## 5. Sticky-Elemente und Tab-Zuordnung (v6b)
 
@@ -201,3 +201,11 @@ GitHub Pages: https://vielleicht420.github.io/tradelab/ – siehe `DEPLOY.md`.
 * `apple-mobile-web-app-status-bar-style` = **`black`** (nicht `black-translucent`). Die Web-Ansicht beginnt unter einer opaken schwarzen Statusleiste; iOS 26 legt dort keinen Liquid-Glass-„Scroll Edge“-Blur mehr über Kopf/Titel/Zahnrad. iOS übernimmt das nur bei einer **neuen** Home-Bildschirm-Installation.
 * `--sat` ist damit 0. Die 100lvh-Korrektur (`html.sa`) greift nur noch, wenn die App noch mit `black-translucent` installiert ist (`--sat` > 0); sonst normales Layout. „kurz“-Fallback bleibt.
 * Kopf in Ruhe ohne Transform/Filter/Schatten; Titel blendet nur per Opacity ein; Zurück/Zahnrad massiv `#24221e` mit Rand `#34312b`; Haarlinie `#2a2722` beim Scrollen.
+
+
+## 12. Sticky-Chart & Scrollytelling (v19)
+- Muster- und Formationsseiten: `.plan-card[data-kind]` ist `position:sticky` direkt unter dem Kopf (`top: var(--sat)+var(--nav)`), opak (`--well`), Haarlinie unten, kein Blur. SVG max. `min(290px,31vh)` → ca. 250 px auf 390×844, 225 px auf 375×667.
+- `stickyStory(v)` (v5_views.js): Marker `[data-st]` (plan, pat, where, confirm, mistake bzw. what, note). Aktiv ist der letzte Marker oberhalb Panel-Unterkante + min(130px, 30 % Restfläche); am Seitenende der letzte sichtbare. Setzt `svg[data-focus]`, Caption-Pill `.pc-cap`, `h3.st-on`.
+- Ebenen (story_patch.py): `.k.ctx/.pat/.fol`, `.f-box`, `.f-hl`, `.zn`, `.trd`, `.fla`, `.ann` (O/H/L/C), `.gh` (Geister-Kerze), `.mis`; Formationen `.lv`, `.pth`, `.brk`, `.brk-r`. Nur Opacity/Transform-Übergänge; reduced-motion schaltet sie ab.
+- Trade-Plan: Beim Erreichen des Plan-Abschnitts werden Entry/Stop/Ziel automatisch eingeblendet (falls nicht manuell bedient), beim Verlassen wieder aus. Kein Auto-Scroll mehr beim Tippen einer Plan-Zeile, weil der Chart sichtbar bleibt.
+- Strategie-Seiten haben keinen Chart → unverändert.

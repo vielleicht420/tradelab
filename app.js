@@ -159,17 +159,21 @@ function candleGeo(p,withPlan){
  const n=all.length,slots=n+(withPlan&&!fol.length?2:0),slot=(W-24)/slots,cw=Math.min(18,slot*.58);const X=i=>12+slot*i+slot/2;
  let g="";const ps=ctx.length,pe=ps+pat.length-1;
  let plo=Infinity,phi=-Infinity;pat.forEach(k=>{plo=Math.min(plo,k[2]);phi=Math.max(phi,k[1])});
- g+=`<g class="fd" style="--dd:${ps*45+60}ms"><rect x="${X(ps)-slot/2+2}" y="${Y(phi)-7}" width="${slot*pat.length-4}" height="${Y(plo)-Y(phi)+14}" rx="10" fill="rgba(255,240,222,.045)" stroke="rgba(255,240,222,.22)" stroke-dasharray="3 3"/></g>`;
- if(p.lvl==="sup"){const y=Y(plo)+5;g+=`<g class="hl" style="--dd:${(pe+1)*45}ms"><line x1="8" x2="${W-8}" y1="${y}" y2="${y}" stroke="#6fd3a0" stroke-width="1.2" stroke-dasharray="5 5" opacity=".55"/><text x="${W-10}" y="${y+12>H-3?y-4:y+12}" text-anchor="end" font-size="9" fill="#6fd3a0" opacity=".8" font-weight="600">Support</text></g>`}
- if(p.lvl==="res"){const y=Y(phi)-5;g+=`<g class="hl" style="--dd:${(pe+1)*45}ms"><line x1="8" x2="${W-8}" y1="${y}" y2="${y}" stroke="#ff7f66" stroke-width="1.2" stroke-dasharray="5 5" opacity=".55"/><text x="${W-10}" y="${y-5}" text-anchor="end" font-size="9" fill="#ff7f66" opacity=".8" font-weight="600">Widerstand</text></g>`}
+ g+=`<g class="f-box"><g class="fd" style="--dd:${ps*45+60}ms"><rect x="${X(ps)-slot/2+2}" y="${Y(phi)-7}" width="${slot*pat.length-4}" height="${Y(plo)-Y(phi)+14}" rx="10" fill="rgba(255,240,222,.045)" stroke="rgba(255,240,222,.22)" stroke-dasharray="3 3"/></g></g>`;
+ if(p.lvl==="sup"){const y=Y(plo)+5;if(withPlan)g+=`<rect class="zn" x="4" y="${y-7}" width="${W-8}" height="16" rx="4" fill="#6fd3a0" fill-opacity=".14"/>`;g+=`<g class="f-hl"><g class="hl" style="--dd:${(pe+1)*45}ms"><line x1="8" x2="${W-8}" y1="${y}" y2="${y}" stroke="#6fd3a0" stroke-width="1.2" stroke-dasharray="5 5" opacity=".55"/><text x="${W-10}" y="${y+12>H-3?y-4:y+12}" text-anchor="end" font-size="9" fill="#6fd3a0" opacity=".8" font-weight="600">Support</text></g></g>`}
+ if(p.lvl==="res"){const y=Y(phi)-5;if(withPlan)g+=`<rect class="zn" x="4" y="${y-9}" width="${W-8}" height="16" rx="4" fill="#ff7f66" fill-opacity=".14"/>`;g+=`<g class="f-hl"><g class="hl" style="--dd:${(pe+1)*45}ms"><line x1="8" x2="${W-8}" y1="${y}" y2="${y}" stroke="#ff7f66" stroke-width="1.2" stroke-dasharray="5 5" opacity=".55"/><text x="${W-10}" y="${y-5}" text-anchor="end" font-size="9" fill="#ff7f66" opacity=".8" font-weight="600">Widerstand</text></g></g>`}
  const arrow=(x1,y1,x2,y2,col,dash,dl)=>{const ang=Math.atan2(y2-y1,x2-x1),L=7;const ax=x2-L*Math.cos(ang-.5),ay=y2-L*Math.sin(ang-.5),bx=x2-L*Math.cos(ang+.5),by=y2-L*Math.sin(ang+.5);
   return `<g class="ar" style="--dd:${dl||0}ms"><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${col}" stroke-width="2" ${dash?'stroke-dasharray="5 4"':''} stroke-linecap="round"/><path d="M${ax},${ay} L${x2},${y2} L${bx},${by}" fill="none" stroke="${col}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>`};
- if(p.ctx!=="side"){const a=ctx[0],b=ctx[ctx.length-1];g+=arrow(X(0)-4,Math.max(6,Y(a[1])-10),X(ctx.length-1)+4,Math.max(6,Y(b[1])-10),"rgba(255,240,222,.32)",false,ctx.length*45+80)}
+ if(p.ctx!=="side"){const a=ctx[0],b=ctx[ctx.length-1];g+='<g class="trd">'+arrow(X(0)-4,Math.max(6,Y(a[1])-10),X(ctx.length-1)+4,Math.max(6,Y(b[1])-10),"rgba(255,240,222,.32)",false,ctx.length*45+80)+'</g>'}
  if(fol.length){const a=fol[0],b=fol[fol.length-1];const up=p.fol==="up";const col=up?"#6fd3a0":"#ff7f66";
-  const y1=up?Y(a[2])+12:Y(a[1])-10,y2=up?Y(b[2])+12:Y(b[1])-10;g+=arrow(X(pe+1)-6,Math.min(H-4,Math.max(6,y1)),X(n-1)+6,Math.min(H-4,Math.max(6,y2)),col,true,n*45+120)}
+  const y1=up?Y(a[2])+12:Y(a[1])-10,y2=up?Y(b[2])+12:Y(b[1])-10;g+='<g class="fla">'+arrow(X(pe+1)-6,Math.min(H-4,Math.max(6,y1)),X(n-1)+6,Math.min(H-4,Math.max(6,y2)),col,true,n*45+120)+'</g>'}
  all.forEach((k,i)=>{const [op,h,l,c]=k;const bull=c>op+.25,bear=c<op-.25;const col=bull?"#6fd3a0":bear?"#ff7f66":"#b5ada0";
   const isF=i>pe,isP=i>=ps&&i<=pe;const opa=isF?.3:isP?1:.5;const x=X(i);const top=Y(Math.max(op,c)),bot=Y(Math.min(op,c));
-  g+=`<g opacity="${opa}"><g class="cd" style="--i:${i}"><line x1="${x}" x2="${x}" y1="${Y(h)}" y2="${Y(l)}" stroke="${col}" stroke-width="1.4" stroke-linecap="round"/><rect x="${x-cw/2}" y="${top}" width="${cw}" height="${Math.max(1.8,bot-top)}" rx="2.2" fill="${col}"/></g></g>`});
+  g+=`<g class="k ${isF?"fol":isP?"pat":"ctx"}" opacity="${opa}"><g class="cd" style="--i:${i}"><line x1="${x}" x2="${x}" y1="${Y(h)}" y2="${Y(l)}" stroke="${col}" stroke-width="1.4" stroke-linecap="round"/><rect x="${x-cw/2}" y="${top}" width="${cw}" height="${Math.max(1.8,bot-top)}" rx="2.2" fill="${col}"/></g></g>`});
+ if(withPlan){const ke=pe,k=all[ke],xk=X(ke),ax=xk+cw/2+5;const L=[["H",k[1]],["O",k[0]],["C",k[3]],["L",k[2]]].map(q=>({t:q[0],y:Y(q[1])})).sort((a,b)=>a.y-b.y);for(let j=1;j<L.length;j++)if(L[j].y-L[j-1].y<10)L[j].ly=(L[j-1].ly||L[j-1].y)+10;
+  g+=`<g class="ann">`+L.map(q=>{const ly=Math.min(H-4,q.ly||q.y);return `<line x1="${xk+cw/2+1}" x2="${ax+2}" y1="${q.y}" y2="${ly}" stroke="#e9e1d3" stroke-width=".8" opacity=".7"/><text x="${ax+4}" y="${ly+3.2}" font-size="9" font-weight="700" fill="#f2ead9">${q.t}</text>`}).join("")+`</g>`;
+  if(!fol.length){const gx=X(pe+1),c0=k[3];g+=`<g class="gh"><rect x="${gx-cw/2}" y="${Y(c0)-26}" width="${cw}" height="40" rx="3" fill="none" stroke="#e9b44c" stroke-width="1.2" stroke-dasharray="3 3"/><text x="${gx}" y="${Y(c0)-2}" text-anchor="middle" font-size="12" font-weight="700" fill="#e9b44c">?</text></g>`}
+  g+=`<g class="mis"><text x="${W/2}" y="${H-5}" text-anchor="middle" font-size="9.5" font-weight="700" fill="#ff7f66">Ohne Trend und Zone ist es ein Münzwurf</text></g>`}
  const svg=`<svg class="pat-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${g}${withPlan?'<g class="plan-z"></g><g class="plan-l"></g>':""}</svg>`;
  const draw={};Object.entries(plans).forEach(([d,q])=>{const mk=o=>({y:Y(o.v),mx:X(ps+o.i),my:Y(o.ref),off:cw/2+3,t:o.t});
   draw[d]={long:q.long,rr:q.rr,entry:mk(q.entry),stop:mk(q.stop),target:{y:Y(q.target.v),t:q.target.t},zx:X(ps+q.entry.i)+cw/2+4,lx:X(ps)-slot/2+2}});
@@ -178,10 +182,10 @@ function candleSVG(p){return candleGeo(p,false).svg}
 function chartGeo(p,withPlan){const MAPC={"#34e5a5":"#6fd3a0","#ff5c7a":"#ff7f66","#ffc14d":"#e9b44c"};const W=320,H=withPlan?200:170;
  let y0=0,y1=100;const plans={};if(withPlan)planDirs(p).forEach(d=>{const q=formPlan(p,d);if(!q)return;plans[d]=q;[q.entry.v,q.stop.v,q.target.v].forEach(v=>{y0=Math.min(y0,v);y1=Math.max(y1,v)})});
  const X=x=>14+x/100*(W-28),Y=y=>H-14-(y-y0)/(y1-y0)*(H-28);
- let g=p.l.map((l,li)=>`<g class="fd" style="--dd:${650+li*90}ms"><line x1="${X(l[0])}" y1="${Y(l[1])}" x2="${X(l[2])}" y2="${Y(l[3])}" stroke="${MAPC[l[4]]||l[4]}" stroke-width="1.5" stroke-dasharray="6 5" opacity=".8"/>`+(l[5]?`<text x="${X(l[2])}" y="${Y(l[3])-6}" font-size="9.5" fill="${MAPC[l[4]]||l[4]}" text-anchor="end" font-weight="600">${l[5]}</text>`:"")+"</g>").join("");
+ let g=p.l.map((l,li)=>`<g class="lv"><g class="fd" style="--dd:${650+li*90}ms"><line x1="${X(l[0])}" y1="${Y(l[1])}" x2="${X(l[2])}" y2="${Y(l[3])}" stroke="${MAPC[l[4]]||l[4]}" stroke-width="1.5" stroke-dasharray="6 5" opacity=".8"/>`+(l[5]?`<text x="${X(l[2])}" y="${Y(l[3])-6}" font-size="9.5" fill="${MAPC[l[4]]||l[4]}" text-anchor="end" font-weight="600">${l[5]}</text>`:"")+"</g></g>").join("");
  const pts=p.p.map((q,i)=>(i?"L":"M")+X(q[0])+","+Y(q[1])).join(" ");const col=p.dir==="bull"?"#6fd3a0":p.dir==="bear"?"#ff7f66":"#b5ada0";
- g+=`<path class="dl" pathLength="1" d="${pts}" fill="none" stroke="url(#lg_${p.id})" stroke-width="2.25" stroke-linejoin="round" stroke-linecap="round"/>`;
- const last=p.p[p.p.length-1];g+=`<g class="pop" style="--dd:950ms"><circle cx="${X(last[0])}" cy="${Y(last[1])}" r="4.5" fill="${col}"/></g>`;
+ g+=`<g class="pth"><path class="dl" pathLength="1" d="${pts}" fill="none" stroke="url(#lg_${p.id})" stroke-width="2.25" stroke-linejoin="round" stroke-linecap="round"/></g>`;
+ const last=p.p[p.p.length-1];if(withPlan){const tl=p.p.slice(-3);g+=`<path class="brk" d="${tl.map((q,i)=>(i?"L":"M")+X(q[0])+","+Y(q[1])).join(" ")}" fill="none" stroke="${col}" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><circle class="brk-r" cx="${X(last[0])}" cy="${Y(last[1])}" r="9" fill="none" stroke="${col}" stroke-width="1.5"/>`}g+=`<g class="pop" style="--dd:950ms"><circle cx="${X(last[0])}" cy="${Y(last[1])}" r="4.5" fill="${col}"/></g>`;
  const svg=`<svg class="pat-svg" viewBox="0 0 ${W} ${H}"><defs><linearGradient id="lg_${p.id}" x1="0" x2="1"><stop offset="0" stop-color="#857d70"/><stop offset=".72" stop-color="#e8e0d2"/><stop offset="1" stop-color="${col}"/></linearGradient></defs>${g}${withPlan?'<g class="plan-z"></g><g class="plan-l"></g>':""}</svg>`;
  const draw={};Object.entries(plans).forEach(([d,q])=>{const mk=o=>({y:Y(o.v),mx:X(o.x),my:Y(o.ref),off:5,t:o.t});
   draw[d]={long:q.long,rr:q.rr,entry:mk(q.entry),stop:mk(q.stop),target:{y:Y(q.target.v),t:q.target.t},zx:X(q.entry.x),lx:Math.min(X(q.entry.x),X(q.stop.x))-10}});
@@ -217,7 +221,7 @@ function planCtl(v,G,defDir){const svg=$(".plan-card svg",v);if(!svg)return;cons
   ["entry","stop","target"].forEach(k=>{if(st[k]&&!$(`.pl[data-k="${k}"]:not(.out)`,gl))planLevel(gl,G,D,k)});layoutPills(gl,G,D);
   const lab=planZones(gz,G,D,st);const full=lab&&lab.startsWith("R:R");info.textContent=n?(D.long?"Long":"Short")+(full?" · "+lab:""):"";if(tip){tip.style.display=full&&D.rr<1.5?"":"none"}};
  const show=()=>{const r=svg.getBoundingClientRect(),top=parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--sat"))||0;const navB=top+44+8,botLim=innerHeight-49-40;
-  if(r.top<navB||r.bottom>botLim){v.scrollTo({top:v.scrollTop+r.top-navB-8,behavior:reduce?"auto":"smooth"});return reduce?0:340}return 0};
+  if(getComputedStyle(svg.closest(".plan-card")).position!=="sticky"&&(r.top<navB||r.bottom>botLim)){v.scrollTo({top:v.scrollTop+r.top-navB-8,behavior:reduce?"auto":"smooth"});return reduce?0:340}return 0};
  rows.forEach(r=>r.onclick=()=>{const k=r.dataset.pk;st[k]=!st[k];const d=st[k]?show():0;r.classList.toggle("on",st[k]);setTimeout(sync,d)});
  all.onclick=()=>{const on=!(st.entry&&st.stop&&st.target);st.entry=st.stop=st.target=on;sync()};
  $$("[data-pdir]",v).forEach(b=>b.onclick=()=>{dir=b.dataset.pdir;$$("[data-pdir]",v).forEach(x=>x.classList.toggle("on",x===b));const th=$(".thumb",b.parentNode);if(th)placeThumb(th,b);gl.innerHTML="";sync()});
@@ -398,24 +402,37 @@ function quiz(el){const st=LS.get("quiz",{r:0,t:0,best:0,streak:0});
   if(ok)burst(b);$("#qfb",el).innerHTML=`<div class="${ok?"good":"warn"} fadein"><b>${ok?"Richtig":"Leider falsch"}</b>${esc(q.name)}: ${esc(q.what)}</div><div class="btn-row"><a class="btn sec" href="#/kerze/${q.id}">Details</a><button class="btn" id="qnext">Nächste Frage</button></div>`;
   $("#qnext",el).onclick=()=>{delete el.dataset.ans;quiz(el)}});goSvg(el,80)}
 const ctxTxt=c=>c==="down"?"nach Abwärtstrend":c==="up"?"nach Aufwärtstrend":"aus Seitwärtsphase";
+/* Scrollytelling: Chart klebt unter dem Kopf, der Abschnitt im Blick steuert die Hervorhebung */
+const ST_LAB={pat:["01","Das Muster"],where:["02","Trend & Zone"],confirm:["03","Bestätigung"],mistake:["04","Ohne Kontext"],plan:["","Trade-Plan"],what:["01","Die Formation"],note:["02","Der Ausbruch"]};
+function stickyStory(v){const card=$(".plan-card",v);if(!card)return;const svg=$("svg",card),cap=$(".pc-cap",card),marks=$$("[data-st]",v);let cur=null,manual=false,auto=false,raf=0;
+ $$("[data-pk],#pall,[data-pdir]",v).forEach(b=>b.addEventListener("click",e=>{if(e.isTrusted)manual=true}));
+ const setF=f=>{if(f===cur)return;const pall=$("#pall",v);
+  if(f==="plan"&&!manual&&pall&&!pall.classList.contains("on")){pall.click();auto=true}
+  if(cur==="plan"&&f!=="plan"&&auto&&!manual&&pall&&pall.classList.contains("on")){pall.click();auto=false}
+  cur=f;if(f)svg.setAttribute("data-focus",f);else svg.removeAttribute("data-focus");
+  const l=f&&f!=="plan"&&ST_LAB[f];cap.innerHTML=l?`${l[0]?`<em>${l[0]}</em>`:""}${l[1]}`:"";cap.classList.toggle("on",!!l);
+  marks.forEach(m=>m.classList.toggle("st-on",m.dataset.st===f))};
+ const tick=()=>{raf=0;if(!v.isConnected)return;const tb=$(".topbar").getBoundingClientRect().bottom,r=card.getBoundingClientRect();const stuck=r.top<=tb+1;card.classList.toggle("stuck",stuck);
+  if(!stuck){setF(null);return}const lim=r.bottom+Math.min(130,(innerHeight-r.bottom)*.3);const end=v.scrollTop+v.clientHeight>=v.scrollHeight-6,lim2=end?innerHeight-120:lim;let f=null;marks.forEach(m=>{if(m.getBoundingClientRect().top<=lim2)f=m.dataset.st});setF(f)};
+ v.addEventListener("scroll",()=>{if(!raf)raf=requestAnimationFrame(tick)},{passive:true});tick()}
 const planSec=(p,neutral,tl)=>`${SH("Der Trade-Plan")}<p class="lead r" style="margin-top:-4px">Tippe auf eine Zeile – das Level erscheint oben im Chart.${neutral?" Neutral: Die Richtung entscheidet der Ausbruch – wähle Long oder Short.":""}</p>
  <div class="planL r">${planRow("entry","enter","Einstieg",p.entry)}${planRow("stop","shield","Stop-Loss",p.stop)}${planRow("target","target",tl||"Ziel",p.target)}</div>`;
 V.kerze=(id)=>{const i=CANDLES.findIndex(p=>p.id===id),p=CANDLES[i];if(!p)return V.kerzen("muster");const nx=CANDLES[(i+1)%CANDLES.length];const G=candleGeo(p,true),dd=planDefault(p),neutral=planDirs(p).length>1;const b=bkP(p);
  const rr=G.draw[dd]?G.draw[dd].rr:0;
  return{title:p.name,html:`${EB(`${nTxt(p.n)} · ${ctxTxt(p.ctx)}`,"a","margin-top:6px")}<h1 class="lt r dt">${esc(p.name)}</h1><div class="tagl r">${TG(p.dir)}${p.en&&p.en!==p.name?`<span>${esc(p.en)}</span>`:""}</div>
  ${b.pct?`<div class="price r"><span class="v"><span data-count="${b.pct}">0</span> %</span><span class="c ${p.dir==="bear"?"dn":p.dir==="bull"?"up":""}">${esc((p.bk.split(" · ")[0]||"").replace(/^\d+\s*%\s*/,""))}</span></div><div class="eb" style="margin-top:6px">Trefferquote · Bulkowski, US-Aktien</div>`:`<p class="lead r" style="margin-top:14px">${esc(p.bk||"")}</p>`}
- <div class="plan-card bleed r">${G.svg}</div><div class="r">${planBar(p,dd)}</div>
+ <div class="plan-card bleed r" data-kind="k">${G.svg}<div class="pc-cap" aria-hidden="true"></div></div><div class="r">${planBar(p,dd)}</div>
  <div class="kv r bleed"><div><span class="eb">R:R</span><b>1 : ${fmtN(rr,1)}</b></div><div><span class="eb">Rang</span><b>${b.rank?`${b.rank}<span>/${b.of}</span>`:"–"}</b></div><div><span class="eb">Kerzen</span><b>${p.n}</b></div></div>
- ${planSec(p,neutral)}
- <div class="art">${[["Erkennen",p.what],["Wo es auftreten muss",p.where],["Bestätigung",p.confirm],["Häufige Fehler",p.mistakes]].map((x,j)=>`<h3 class="r"><em>0${j+1}</em>${x[0]}</h3><p class="r">${esc(x[1])}</p>`).join("")}</div>
- <a class="nextL press r" href="#/kerze/${nx.id}"><div class="th">${candleSVG(nx)}</div><div style="flex:1;min-width:0"><span class="eb">Nächstes Muster</span><b>${esc(nx.name)}</b></div><span class="arr">${ARW}</span></a>`,after(v){planCtl(v,G,dd)}}};
+ <span class="st-m" data-st="plan"></span>${planSec(p,neutral)}
+ <div class="art">${[["Erkennen",p.what],["Wo es auftreten muss",p.where],["Bestätigung",p.confirm],["Häufige Fehler",p.mistakes]].map((x,j)=>`<h3 class="r" data-st="${["pat","where","confirm","mistake"][j]}"><em>0${j+1}</em>${x[0]}</h3><p class="r">${esc(x[1])}</p>`).join("")}</div>
+ <a class="nextL press r" href="#/kerze/${nx.id}"><div class="th">${candleSVG(nx)}</div><div style="flex:1;min-width:0"><span class="eb">Nächstes Muster</span><b>${esc(nx.name)}</b></div><span class="arr">${ARW}</span></a>`,after(v){planCtl(v,G,dd);stickyStory(v)}}};
 V.formation=(id)=>{const i=CHARTPATTERNS.findIndex(x=>x.id===id),p=CHARTPATTERNS[i];if(!p)return V.kerzen("chart");const nx=CHARTPATTERNS[(i+1)%CHARTPATTERNS.length];const G=chartGeo(p,true),dd=planDefault(p),neutral=planDirs(p).length>1;const rr=G.draw[dd]?G.draw[dd].rr:0;
  return{title:p.name,html:`${EB("Chartformation","a","margin-top:6px")}<h1 class="lt r dt">${esc(p.name)}</h1><div class="tagl r">${TG(p.dir)}<span>gilt erst nach Ausbruch</span></div>
- <div class="plan-card bleed r" style="margin-top:18px">${G.svg}</div><div class="r">${planBar(p,dd)}</div>
+ <div class="plan-card bleed r" data-kind="f" style="margin-top:18px">${G.svg}<div class="pc-cap" aria-hidden="true"></div></div><div class="r">${planBar(p,dd)}</div>
  <div class="kv r bleed"><div><span class="eb">R:R</span><b>1 : ${fmtN(rr,1)}</b></div><div><span class="eb">Richtung</span><b>${p.dir==="bull"?"Long":p.dir==="bear"?"Short":"Beide"}</b></div><div><span class="eb">Typ</span><b>${p.dir==="neutral"?"Fortsetz.":"Umkehr"}</b></div></div>
- ${planSec(p,neutral,"Kursziel")}
- <div class="art"><h3 class="r"><em>01</em>Was du siehst</h3><p class="r">${esc(p.what)}</p><h3 class="r"><em>02</em>Einordnung</h3><p class="r">${esc(p.note)}</p></div>
- <a class="nextL press r" href="#/formation/${nx.id}"><div class="th">${chartSVG(nx)}</div><div style="flex:1;min-width:0"><span class="eb">Nächste Formation</span><b>${esc(nx.name)}</b></div><span class="arr">${ARW}</span></a>`,after(v){planCtl(v,G,dd)}}};
+ <span class="st-m" data-st="plan"></span>${planSec(p,neutral,"Kursziel")}
+ <div class="art"><h3 class="r" data-st="what"><em>01</em>Was du siehst</h3><p class="r">${esc(p.what)}</p><h3 class="r" data-st="note"><em>02</em>Einordnung</h3><p class="r">${esc(p.note)}</p></div>
+ <a class="nextL press r" href="#/formation/${nx.id}"><div class="th">${chartSVG(nx)}</div><div style="flex:1;min-width:0"><span class="eb">Nächste Formation</span><b>${esc(nx.name)}</b></div><span class="arr">${ARW}</span></a>`,after(v){planCtl(v,G,dd);stickyStory(v)}}};
 
 /* Strategien */
 let sSort="total";
