@@ -513,8 +513,8 @@ V.einstellungen=()=>{const c=getCfg(),ac=LS.get("accent","amber");return{title:"
  ${SH("Daten")}
  <div class="rows r"><button class="rw" id="s_rp"><span class="ic">${I.reset}</span><b>Lernfortschritt &amp; Quiz zurücksetzen</b></button><button class="rw" id="s_rk"><span class="ic">${I.cards}</span><b>Karteikarten-Fortschritt zurücksetzen</b></button><button class="rw" id="s_ra"><span class="ic">${I.trash}</span><b>Gespeicherte Analyse löschen</b></button></div>
  ${SH("App")}
- <div class="rows r"><div class="rw"><span class="ic">${I.phone}</span><div><b>Installieren</b><span>Safari → Teilen → Zum Home-Bildschirm. Danach auch offline nutzbar (außer KI-Analyse).</span></div></div><div class="rw"><span class="ic">${I.info}</span><div><b>TradeLab 6.0</b><span>Inhalte Stand November 2026 · Keine Anlageberatung</span></div></div></div>`,
- after(v){$$("[data-acc]",v).forEach(b=>b.onclick=()=>{LS.set("accent",b.dataset.acc);applyAccent(b.dataset.acc);$$("[data-acc]",v).forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-checked",x===b)});
+ <div class="rows r"><div class="rw"><span class="ic">${I.phone}</span><div><b>Installieren</b><span>Safari → Teilen → Zum Home-Bildschirm. Danach auch offline nutzbar (außer KI-Analyse).</span></div></div><div class="rw"><span class="ic">${I.info}</span><div><b>TradeLab 6.1</b><span>Inhalte Stand November 2026 · Keine Anlageberatung</span><span id="s_vh" style="opacity:.6;font-size:12px"></span></div></div></div>`,
+ after(v){{const e=$("#s_vh",v),x=window.__vh&&window.__vh();if(e&&x)e.textContent=` · Anzeige ${x.iw}×${x.ih} · Bildschirm ${x.sw}×${x.sh} · ${x.sa?"Home-Bildschirm-App":"Browser"} · Safe-Area ${x.sab.trim()||"0px"} · Ausgleich ${x.bfix.trim()}`}$$("[data-acc]",v).forEach(b=>b.onclick=()=>{LS.set("accent",b.dataset.acc);applyAccent(b.dataset.acc);$$("[data-acc]",v).forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-checked",x===b)});
    b.classList.remove("pop");void b.offsetWidth;b.classList.add("pop");const pr=$(".prev",v);pr.classList.remove("flash");void pr.offsetWidth;pr.classList.add("flash");try{navigator.vibrate&&navigator.vibrate(6)}catch(e){}});
   const upd=()=>{const p=$("#s_p",v).value;$("#s_m",v).placeholder=PROV[p].model||"Modellname";$("#s_bw",v).style.display=p==="custom"?"":"none"};upd();$("#s_p",v).onchange=upd;
   const read=()=>({provider:$("#s_p",v).value,key:$("#s_k",v).value.trim(),model:$("#s_m",v).value.trim(),base:$("#s_b",v).value.trim().replace(/\/+$/,"")});
@@ -828,6 +828,11 @@ function fcSummary(w){fcS.done=true;const S=fcS,done=S.missed.length+S.ok,N=done
  $("#fc_again",w).onclick=()=>fcStart(w,fcDeck(S.mode,S.type));
  reveal(w);if(pct>=.7)setTimeout(()=>burst($(".trophy",w),16),reduce?0:500)}
 
+/* iOS-Standalone: falls der Layout-Viewport kürzer ist als der Bildschirm, Hülle und Tab-Leiste bis zur echten Unterkante ziehen */
+const isSA=()=>navigator.standalone===true||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches);
+function fixVH(){const R=document.documentElement;let f=0;if(isSA()){const ih=innerHeight,portrait=ih>innerWidth,sh=portrait?Math.max(screen.height,screen.width):Math.min(screen.height,screen.width);const d=Math.round(sh-ih);if(d>0&&d<=120)f=d}R.style.setProperty("--bfix",f+"px");R.classList.toggle("sa",isSA())}
+fixVH();addEventListener("resize",fixVH);addEventListener("orientationchange",()=>setTimeout(fixVH,250));
+window.__vh=()=>({ih:innerHeight,iw:innerWidth,sh:screen.height,sw:screen.width,sa:isSA(),bfix:getComputedStyle(document.documentElement).getPropertyValue("--bfix"),sab:getComputedStyle(document.documentElement).getPropertyValue("--sab")});
 /* ---------- Router ---------- */
 /* iOS: nur echte Scrollflächen dürfen sich bewegen – Kopf, Tab-Leiste, Prüfen-Leiste nie */
 document.addEventListener("touchmove",e=>{if(e.touches.length!==1)return;const t=e.target;if(t&&t.closest&&t.closest(".view,.hscroll,.filters,.tablewrap,input,textarea,select"))return;if(e.cancelable)e.preventDefault()},{passive:false});

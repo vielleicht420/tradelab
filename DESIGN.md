@@ -85,7 +85,8 @@ So sind die einzelnen Screens aufgebaut:
 Die Tab-Leiste ist eine schwebende Pille:
 
 * links/rechts 12 px, Höhe 64 px, Radius 32
-* `bottom: max(calc(var(--sab) - 12px), 12px)` – sitzt knapp über dem Home-Indikator (iPhone: 22 px vom Rand), ohne Safe-Area 12 px
+* `bottom: calc(var(--tbb) - var(--bfix))` mit `--tbb: max(8px, calc(var(--sab) - 14px))` – iPhone: 20 px vom physischen Rand, ohne Safe-Area 8 px
+* `--bfix` (JS `fixVH()`): nur in der Home-Bildschirm-App. Ist der Layout-Viewport kürzer als der Bildschirm (iOS-Eigenheit), werden Hülle, Tab-Leiste, Prüfen-Leiste, Toast und Verlauf um die Differenz (max. 120 px) nach unten gezogen. Diagnose-Werte stehen in Einstellungen unter „TradeLab 6.1“.
 * Der aktive Tab wächst (flex 2,1), wird akzentfarben und zeigt sein Label.
 
 Ein Verlauf (`#app::after`) lässt den Inhalt weich unter der Pille auslaufen. Seit dem Umzug auf GitHub Pages (v6d) gibt es keinen deed.page-Hinweis und keine Reservierung dafür mehr.
@@ -152,7 +153,7 @@ Instrument Serif hat keine Tabellenziffern. Damit Hochzählen nicht springt, fix
 * Keine Regenbogen-Verläufe, kein Emoji-Spam, kein schweres Glas.
 * App-Texte auf Deutsch, Du-Form.
 * Kein API-Schlüssel im Code. Der Schlüssel liegt nur im `localStorage` des Geräts.
-* Service-Worker-Cache: `tradelab-v13`.
+* Service-Worker-Cache: `tradelab-v14`.
 
 ## 5. Sticky-Elemente und Tab-Zuordnung (v6b)
 
